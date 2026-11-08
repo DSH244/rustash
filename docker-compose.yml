@@ -1,0 +1,80 @@
+# Rustash overlay for the official LobeHub Docker Compose deployment.
+#
+# This is a Compose overlay, not a replacement for LobeHub's official stack.
+# First configure the official .env, append the three QSTASH_* secrets below,
+# then run from LobeHub's docker-compose/deploy directory:
+#
+#   docker compose \
+#     -f docker-compose.yml \
+#     -f /path/to/rustash-public/docker-compose.yml \
+#     up -d
+#
+# Both files then share the official `lobe-network`; the `lobe` service receives
+# the QStash settings below and Rustash can call it back at http://lobe:3210.
+# Compose merges environment and depends_on entries for the existing `lobe`
+# service, preserving the database, Redis, S3 and gateway dependencies.
+#
+# Add these values to the official deployment .env. Keep them identical on both
+# services; never commit the .env file.
+#   QSTASH_TOKEN=<random token>
+#   QSTASH_CURRENT_SIGNING_KEY=<random signing key>
+#   QSTASH_NEXT_SIGNING_KEY=<random next signing key>
+#   APP_URL=http://localhost:3210
+
+services:
+  rustash:
+    image: hardyone/rustash:latest
+    container_name: lobe-rustash
+    restart: unless-stopped
+    environment:
+      PORT: "8080"
+      DATABASE_URL: sqlite:///data/rstash.sqlite3
+      QSTASH_TOKEN: ${QSTASH_TOKEN:?set QSTASH_TOKEN in the official .env}
+      QSTASH_CURRENT_SIGNING_KEY: ${QSTASH_CURRENT_SIGNING_KEY:?set QSTASH_CURRENT_SIGNING_KEY in the official .env}
+      QSTASH_NEXT_SIGNING_KEY: ${QSTASH_NEXT_SIGNING_KEY:?set QSTASH_NEXT_SIGNING_KEY in the official .env}
+      # Self-hosted LobeHub callbacks use private Docker-network addresses.
+      # Cloud metadata ranges remain blocked by Rustash regardless of this flag.
+      ALLOW_PRIVATE_DESTINATIONS: "true"
+    volumes:
+      # The image creates /data owned by UID 10001.
+      - rustash-state:/data
+    # No host port is required: LobeHub reaches Rustash over lobe-network.
+    # Uncomment for host-local health checks only; do not expose publicly.
+    # ports:
+    #   - "127.0.0.1:8081:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8080/v2/health"]
+      interval: 10s
+      timeout: 5s
+      start_period: 20s
+      retries: 5
+    networks:
+      - lobe-network
+
+  # Merge these settings into the `lobe` service from LobeHub's official file.
+  lobe:
+    depends_on:
+      rustash:
+        condition: service_healthy
+    environment:
+      # LobeHub -> Rustash (publish): the Upstash SDK reads this base URL.
+      # Do not append /v2/publish.
+      QSTASH_URL: http://rustash:8080
+      QSTASH_TOKEN: ${QSTASH_TOKEN:?set QSTASH_TOKEN in the official .env}
+      AGENT_RUNTIME_MODE: queue
+      # Official LobeHub uses INTERNAL_APP_URL before APP_URL for internal URLs.
+      # This keeps workflow callbacks on the Compose network, e.g. /api/workflows/....
+      INTERNAL_APP_URL: http://lobe:3210
+      APP_URL: ${APP_URL:-http://localhost:3210}
+      # LobeHub Receiver verifies the same keys Rustash uses to sign deliveries.
+      QSTASH_CURRENT_SIGNING_KEY: ${QSTASH_CURRENT_SIGNING_KEY:?set QSTASH_CURRENT_SIGNING_KEY in the official .env}
+      QSTASH_NEXT_SIGNING_KEY: ${QSTASH_NEXT_SIGNING_KEY:?set QSTASH_NEXT_SIGNING_KEY in the official .env}
+    networks:
+      - lobe-network
+
+networks:
+  # This merges with the network declared in the official deployment compose file.
+  lobe-network: {}
+
+volumes:
+  rustash-state: {}

@@ -1,0 +1,3233 @@
+{
+  "capture": {
+    "binary": "rustash (release)",
+    "dispatchTickMs": 100,
+    "maxBodyBytes": 4096,
+    "maxBodyBytesIsShrunk": true,
+    "region": "us-east-1",
+    "schedulerTickMs": 500,
+    "service": "rustash",
+    "settle": "sink delivery count flat for 700 ms (1200 ms on the final read)",
+    "unnormalizedResponses": "the mirror of this run is written next to it as <name>.raw.json"
+  },
+  "corpus": "wire-golden/2026-11-06.1",
+  "deliveries": [
+    {
+      "body": "batch-a",
+      "bodyBytes": 7,
+      "bodySha256": "a40c684861eaedf0ba93b24850e7153280225e297566a3c62b7b3db0b8cfcea0",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "7",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#10>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    },
+    {
+      "body": "batch-b",
+      "bodyBytes": 7,
+      "bodySha256": "89a0bfc3407b8257c04c4310c168ad0efe640ee31f71c08efdc6fbab62cfbcd1",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "7",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#11>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash",
+        "x-b": "2"
+      },
+      "method": "POST",
+      "path": "/alt"
+    },
+    {
+      "body": "batchpublish-alias",
+      "bodyBytes": 18,
+      "bodySha256": "0e096a7bc0ab48ddd3ab55e930355fa949b16504abd4b21629bd6f3d65fb01ba",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "18",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#12>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    },
+    {
+      "body": "dlq-body",
+      "bodyBytes": 8,
+      "bodySha256": "b0d0c77d28e7e21ab77ed65560863d9f9fe8258856447d0a020b96ba4eddd212",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "8",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#14>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/fail"
+    },
+    {
+      "body": "dlq-body",
+      "bodyBytes": 8,
+      "bodySha256": "b0d0c77d28e7e21ab77ed65560863d9f9fe8258856447d0a020b96ba4eddd212",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "8",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#15>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/fail"
+    },
+    {
+      "body": "paused-body",
+      "bodyBytes": 11,
+      "bodySha256": "e669c441a0a038d95f7cee3ca4bc340ca12301e359d4dbf429a2a075c24f0b0b",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "11",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#16>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    },
+    {
+      "body": "fanout-body",
+      "bodyBytes": 11,
+      "bodySha256": "6b1f2814adbbcca7a90719645370f929f04e2503f4fda0fdbcc4ef09755a01f2",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "11",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#17>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "upstash-topic-name": "wire-topic",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    },
+    {
+      "body": "fanout-body",
+      "bodyBytes": 11,
+      "bodySha256": "6b1f2814adbbcca7a90719645370f929f04e2503f4fda0fdbcc4ef09755a01f2",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "11",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#18>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "upstash-topic-name": "wire-topic",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/alt"
+    },
+    {
+      "body": null,
+      "bodyBytes": 0,
+      "bodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "0",
+        "content-type": "application/json",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#19>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/wf"
+    },
+    {
+      "body": "{\"hello\":\"world\"}",
+      "bodyBytes": 17,
+      "bodySha256": "93a23971a914e5eacbf0a8d25154cda309c3c1c72fbb9914d47c60f3cb681588",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "17",
+        "content-type": "application/json",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#1>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    },
+    {
+      "body": "batch-ok",
+      "bodyBytes": 8,
+      "bodySha256": "8e998187b34b03b4f2ffcc620a0764d749ada826c28f83ae7d5b043efdead18a",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "8",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#21>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    },
+    {
+      "body": "dedupe-body",
+      "bodyBytes": 11,
+      "bodySha256": "4e4ec367fcb3755095888ec558499aa0bab6dce2a44a3cf65fbe6a68c08f5320",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "11",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#3>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    },
+    {
+      "body": "content-dedupe-body",
+      "bodyBytes": 19,
+      "bodySha256": "3c10d10c2f6b25c1f5ff6d10e00c22da7dda3c94866946500fe2c26b0b397894",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "19",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#4>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    },
+    {
+      "body": "forward-body",
+      "bodyBytes": 12,
+      "bodySha256": "1a3e355d716ee85bd87630af4959a5cf1e6fb419e9bae4b595fe9364e2871e93",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "12",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#6>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash",
+        "x-wire": "alpha"
+      },
+      "method": "PUT",
+      "path": "/ok"
+    },
+    {
+      "body": "header-forward-body",
+      "bodyBytes": 19,
+      "bodySha256": "a43f5b2b01ad2edcaa5075a15a2ff4deb7423de8ef0ee05649225be3f9e89a41",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "19",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#7>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash",
+        "x-wire-trace": "hf-1"
+      },
+      "method": "POST",
+      "path": "/alt"
+    },
+    {
+      "body": "caller-ip-body",
+      "bodyBytes": 14,
+      "bodySha256": "bee2abf697226734cac8f2f4a995403f68abb4938718f2d97afbf4b290768551",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "14",
+        "host": "sink.invalid",
+        "upstash-caller-ip": "<caller_ip>",
+        "upstash-message-id": "<msg#8>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    },
+    {
+      "body": "enqueue-body",
+      "bodyBytes": 12,
+      "bodySha256": "c135bf5bcec554a28f2045e56dc1db3989b746821d7e836024a460f4d7ae93e4",
+      "headers": {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "*",
+        "connection": "keep-alive",
+        "content-length": "12",
+        "host": "sink.invalid",
+        "upstash-message-id": "<msg#9>",
+        "upstash-region": "us-east-1",
+        "upstash-retried": "0",
+        "upstash-signature": "<upstash_signature>",
+        "user-agent": "Upstash-QStash"
+      },
+      "method": "POST",
+      "path": "/ok"
+    }
+  ],
+  "schema": "rustash-wire-golden/1",
+  "steps": [
+    {
+      "family": "health",
+      "id": "health-v2",
+      "index": 1,
+      "path_kind": "ok",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/v2/health"
+      },
+      "response": {
+        "body": "{\"status\":\"ok\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "15",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "health",
+      "id": "health-readyz",
+      "index": 2,
+      "path_kind": "ok",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/readyz"
+      },
+      "response": {
+        "body": "{\"status\":\"ok\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "15",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "health",
+      "id": "health-v1-alias",
+      "index": 3,
+      "path_kind": "ok",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/v1/health"
+      },
+      "response": {
+        "body": "{\"status\":\"ok\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "15",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "health",
+      "id": "health-unknown-subpath",
+      "index": 4,
+      "path_kind": "error",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/healthz/extra"
+      },
+      "response": {
+        "body": "404 Not Found",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "13",
+          "content-type": "text/plain; charset=utf-8",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-url",
+      "index": 5,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "17",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#1>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-delay",
+      "index": 6,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "10",
+          "upstash-delay": "600"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#2>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-deduplication-id-first",
+      "index": 7,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "11",
+          "upstash-deduplication-id": "wire-dedupe-1"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#3>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-deduplication-id-repeat",
+      "index": 8,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "11",
+          "upstash-deduplication-id": "wire-dedupe-1"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#3>\",\"deduplicated\":true}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "66",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-content-based-dedupe-first",
+      "index": 9,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "19",
+          "upstash-content-based-deduplication": "true"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#4>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-content-based-dedupe-repeat",
+      "index": 10,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "19",
+          "upstash-content-based-deduplication": "true"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#4>\",\"deduplicated\":true}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "66",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-flow-control",
+      "index": 11,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "7",
+          "upstash-delay": "3600",
+          "upstash-flow-control-key": "wire-fc-quiet",
+          "upstash-flow-control-value": "parallelism=2,rate=10,period=1s"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#5>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-forward-headers",
+      "index": 12,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "12",
+          "upstash-forward-content-type": "text/plain",
+          "upstash-forward-x-wire": "alpha",
+          "upstash-method": "PUT"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#6>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-header-forward",
+      "index": 13,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "19",
+          "upstash-header-forward": "true",
+          "x-wire-trace": "hf-1"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/alt"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#7>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-caller-ip",
+      "index": 14,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "14",
+          "x-forwarded-for": "<caller_ip>"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#8>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-missing-destination",
+      "index": 15,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/publish/"
+      },
+      "response": {
+        "body": "{\"error\":\"missing destination\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "31",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-invalid-delay",
+      "index": 16,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "upstash-delay": "5x"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"error\":\"invalid Upstash-Delay: \\\"5x\\\"\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "41",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-unknown-topic",
+      "index": 17,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/publish/wire-topic-missing"
+      },
+      "response": {
+        "body": "{\"error\":\"URL group \\\"wire-topic-missing\\\" not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "54",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "publish",
+      "id": "publish-blocked-destination",
+      "index": 18,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://169.254.169.254/wire"
+      },
+      "response": {
+        "body": "{\"error\":\"destination address is not allowed\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "enqueue",
+      "id": "enqueue-ok",
+      "index": 19,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "12"
+        },
+        "method": "POST",
+        "path": "/v2/enqueue/wire-enq/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#9>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "enqueue",
+      "id": "enqueue-missing-destination",
+      "index": 20,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/enqueue/wire-enq"
+      },
+      "response": {
+        "body": "{\"error\":\"missing queue name or destination\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "45",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "enqueue",
+      "id": "enqueue-oversize-body",
+      "index": 21,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "5000"
+        },
+        "method": "POST",
+        "path": "/v2/enqueue/wire-enq/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"error\":\"request body exceeds MAX_BODY_BYTES (4096 bytes)\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "60",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 412
+      }
+    },
+    {
+      "family": "batch",
+      "id": "batch-two-items",
+      "index": 22,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "172",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/batch"
+      },
+      "response": {
+        "body": "[{\"messageId\":\"<msg#10>\"},{\"messageId\":\"<msg#11>\"}]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "95",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "batch",
+      "id": "batchpublish-alias",
+      "index": 23,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "73",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/batchPublish"
+      },
+      "response": {
+        "body": "[{\"messageId\":\"<msg#12>\"}]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "48",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "batch",
+      "id": "batch-item-failure",
+      "index": 24,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "129",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/batch"
+      },
+      "response": {
+        "body": "{\"error\":\"URL group \\\"wire-topic-missing\\\" not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "54",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "batch",
+      "id": "batch-oversize-item",
+      "index": 25,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "5055",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/batch"
+      },
+      "response": {
+        "body": "{\"error\":\"body exceeds MAX_BODY_BYTES (4096 bytes)\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "52",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 412
+      }
+    },
+    {
+      "family": "batch",
+      "id": "batch-not-an-array",
+      "index": 26,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "19",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/batch"
+      },
+      "response": {
+        "body": "{\"error\":\"batch body must be an array\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "39",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "batch",
+      "id": "batch-invalid-json",
+      "index": 27,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "8",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/batch"
+      },
+      "response": {
+        "body": "{\"error\":\"internal server error\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "33",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 500
+      }
+    },
+    {
+      "family": "messages",
+      "id": "messages-get-delayed",
+      "index": 28,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/messages/<msg#2>"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#2>\",\"url\":\"http://sink.invalid/ok\",\"method\":\"POST\",\"header\":{},\"body\":\"delay-body\",\"createdAt\":<ts_ms>,\"state\":\"CREATED\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "172",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "messages",
+      "id": "messages-delete-single",
+      "index": 29,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "DELETE",
+        "path": "/v2/messages/<msg#2>"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 202
+      }
+    },
+    {
+      "family": "messages",
+      "id": "messages-get-after-delete",
+      "index": 30,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/messages/<msg#2>"
+      },
+      "response": {
+        "body": "{\"error\":\"message not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "29",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "messages",
+      "id": "messages-delete-unknown",
+      "index": 31,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "DELETE",
+        "path": "/v2/messages/msg_01WIREGOLDENUNKNOWNAAAAAAA"
+      },
+      "response": {
+        "body": "{\"error\":\"message not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "29",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "messages",
+      "id": "messages-bulk-cancel-seed",
+      "index": 32,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "6",
+          "upstash-delay": "900"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#13>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "messages",
+      "id": "messages-bulk-cancel",
+      "index": 33,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "82",
+          "content-type": "application/json"
+        },
+        "method": "DELETE",
+        "path": "/v2/messages"
+      },
+      "response": {
+        "body": "{\"cancelled\":2}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "15",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 202
+      }
+    },
+    {
+      "family": "dlq",
+      "id": "dlq-seed-failure",
+      "index": 34,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "8",
+          "upstash-retries": "0"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/fail"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#14>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "dlq",
+      "id": "dlq-list",
+      "index": 35,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/dlq?count=10"
+      },
+      "response": {
+        "body": "{\"messages\":[{\"dlqId\":\"<dlq#1>\",\"messageId\":\"<msg#14>\",\"url\":\"http://sink.invalid/fail\",\"method\":\"POST\",\"header\":{},\"body\":\"dlq-body\",\"maxRetries\":0,\"createdAt\":<ts_ms>,\"state\":\"FAILED\",\"responseStatus\":500,\"responseBody\":\"{\\\"fail\\\":true}\",\"responseHeader\":{\"date\":[\"<http_date>\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"labels\":[]}]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "536",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "dlq",
+      "id": "dlq-get",
+      "index": 36,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/dlq/<dlq#1>"
+      },
+      "response": {
+        "body": "{\"dlqId\":\"<dlq#1>\",\"messageId\":\"<msg#14>\",\"url\":\"http://sink.invalid/fail\",\"method\":\"POST\",\"header\":{},\"body\":\"dlq-body\",\"maxRetries\":0,\"createdAt\":<ts_ms>,\"state\":\"FAILED\",\"responseStatus\":500,\"responseBody\":\"{\\\"fail\\\":true}\",\"responseHeader\":{\"date\":[\"<http_date>\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"labels\":[]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "521",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "dlq",
+      "id": "dlq-retry-single",
+      "index": 37,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/dlq/retry/<dlq#1>"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#15>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "dlq",
+      "id": "dlq-list-after-retry",
+      "index": 38,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/dlq?count=10"
+      },
+      "response": {
+        "body": "{\"messages\":[{\"dlqId\":\"<dlq#2>\",\"messageId\":\"<msg#15>\",\"url\":\"http://sink.invalid/fail\",\"method\":\"POST\",\"header\":{},\"body\":\"dlq-body\",\"maxRetries\":0,\"createdAt\":<ts_ms>,\"state\":\"FAILED\",\"responseStatus\":500,\"responseBody\":\"{\\\"fail\\\":true}\",\"responseHeader\":{\"date\":[\"<http_date>\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"labels\":[]}]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "536",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "dlq",
+      "id": "dlq-bulk-delete",
+      "index": 39,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "45",
+          "content-type": "application/json"
+        },
+        "method": "DELETE",
+        "path": "/v2/dlq"
+      },
+      "response": {
+        "body": "{\"deleted\":1}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "13",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "dlq",
+      "id": "dlq-list-empty",
+      "index": 40,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/dlq"
+      },
+      "response": {
+        "body": "{\"messages\":[]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "15",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "dlq",
+      "id": "dlq-get-unknown",
+      "index": 41,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/dlq/dlq_01WIREGOLDENUNKNOWNAAAAAAA"
+      },
+      "response": {
+        "body": "{\"error\":\"DLQ message not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "33",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "dlq",
+      "id": "dlq-retry-unknown",
+      "index": 42,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/dlq/retry/dlq_01WIREGOLDENUNKNOWNAAAAAAA"
+      },
+      "response": {
+        "body": "{\"error\":\"DLQ message not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "33",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "keys",
+      "id": "keys-get",
+      "index": 43,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/keys"
+      },
+      "response": {
+        "body": "{\"current\":\"<signing_key:current>\",\"next\":\"<signing_key:next>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "92",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "keys",
+      "id": "keys-rotate",
+      "index": 44,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/keys/rotate"
+      },
+      "response": {
+        "body": "{\"current\":\"<signing_key:next>\",\"next\":\"<signing_key_rotated#1>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "94",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "keys",
+      "id": "keys-get-after-rotate",
+      "index": 45,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/keys"
+      },
+      "response": {
+        "body": "{\"current\":\"<signing_key:next>\",\"next\":\"<signing_key_rotated#1>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "94",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "keys",
+      "id": "keys-bad-token",
+      "index": 46,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/keys"
+      },
+      "response": {
+        "body": "{\"error\":\"invalid authorization token\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "39",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 401
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-create",
+      "index": 47,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "38",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/queues"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-list",
+      "index": 48,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/queues"
+      },
+      "response": {
+        "body": "[{\"name\":\"wire-enq\",\"parallelism\":1,\"paused\":false,\"lag\":0,\"createdAt\":<ts_ms>,\"updatedAt\":<ts_ms>},{\"name\":\"wire-q\",\"parallelism\":2,\"paused\":false,\"lag\":0,\"createdAt\":<ts_ms>,\"updatedAt\":<ts_ms>}]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "221",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-get",
+      "index": 49,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/queues/wire-q"
+      },
+      "response": {
+        "body": "{\"name\":\"wire-q\",\"parallelism\":2,\"paused\":false,\"lag\":0,\"createdAt\":<ts_ms>,\"updatedAt\":<ts_ms>}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "108",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-pause",
+      "index": 50,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/queues/wire-q/pause"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-get-paused",
+      "index": 51,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/queues/wire-q"
+      },
+      "response": {
+        "body": "{\"name\":\"wire-q\",\"parallelism\":2,\"paused\":true,\"lag\":0,\"createdAt\":<ts_ms>,\"updatedAt\":<ts_ms>}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "107",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-paused-publish",
+      "index": 52,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "11"
+        },
+        "method": "POST",
+        "path": "/v2/enqueue/wire-q/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#16>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-get-lag",
+      "index": 53,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/queues/wire-q"
+      },
+      "response": {
+        "body": "{\"name\":\"wire-q\",\"parallelism\":2,\"paused\":true,\"lag\":1,\"createdAt\":<ts_ms>,\"updatedAt\":<ts_ms>}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "107",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-resume",
+      "index": 54,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/queues/wire-q/resume"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-delete",
+      "index": 55,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "DELETE",
+        "path": "/v2/queues/wire-q"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-get-after-delete",
+      "index": 56,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/queues/wire-q"
+      },
+      "response": {
+        "body": "{\"error\":\"queue not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "27",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-pause-unknown",
+      "index": 57,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/queues/wire-missing/pause"
+      },
+      "response": {
+        "body": "{\"error\":\"queue not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "27",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-invalid-parallelism",
+      "index": 58,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "40",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/queues"
+      },
+      "response": {
+        "body": "{\"error\":\"parallelism must be >= 1\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "36",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "queues",
+      "id": "queues-invalid-name",
+      "index": 59,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "29",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/queues"
+      },
+      "response": {
+        "body": "{\"error\":\"queue name may only contain letters, numbers, hyphens, underscores\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "78",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-add-endpoints",
+      "index": 60,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "124",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/topics/wire-topic/endpoints"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-list",
+      "index": 61,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/topics"
+      },
+      "response": {
+        "body": "[{\"name\":\"wire-topic\",\"createdAt\":<ts_ms>,\"updatedAt\":<ts_ms>,\"endpoints\":[{\"name\":\"primary\",\"url\":\"http://sink.invalid/ok\"},{\"name\":\"secondary\",\"url\":\"http://sink.invalid/alt\"}]}]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "198",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-get",
+      "index": 62,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/topics/wire-topic"
+      },
+      "response": {
+        "body": "{\"name\":\"wire-topic\",\"createdAt\":<ts_ms>,\"updatedAt\":<ts_ms>,\"endpoints\":[{\"name\":\"primary\",\"url\":\"http://sink.invalid/ok\"},{\"name\":\"secondary\",\"url\":\"http://sink.invalid/alt\"}]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "196",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-publish-fanout",
+      "index": 63,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "11"
+        },
+        "method": "POST",
+        "path": "/v2/publish/wire-topic"
+      },
+      "response": {
+        "body": "[{\"messageId\":\"<msg#17>\",\"url\":\"http://sink.invalid/ok\"},{\"messageId\":\"<msg#18>\",\"url\":\"http://sink.invalid/alt\"}]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "164",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-remove-one-endpoint",
+      "index": 64,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "52",
+          "content-type": "application/json"
+        },
+        "method": "DELETE",
+        "path": "/v2/topics/wire-topic/endpoints"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-get-after-remove",
+      "index": 65,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/topics/wire-topic"
+      },
+      "response": {
+        "body": "{\"name\":\"wire-topic\",\"createdAt\":<ts_ms>,\"updatedAt\":<ts_ms>,\"endpoints\":[{\"name\":\"primary\",\"url\":\"http://sink.invalid/ok\"}]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "140",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-delete",
+      "index": 66,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "DELETE",
+        "path": "/v2/topics/wire-topic"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-get-after-delete",
+      "index": 67,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/topics/wire-topic"
+      },
+      "response": {
+        "body": "{\"error\":\"URL group not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "31",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-empty-endpoints",
+      "index": 68,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "16",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/topics/wire-topic-2/endpoints"
+      },
+      "response": {
+        "body": "{\"error\":\"endpoints are required\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "34",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "topics",
+      "id": "topics-blocked-endpoint",
+      "index": 69,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "56",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/topics/wire-topic-3/endpoints"
+      },
+      "response": {
+        "body": "{\"error\":\"destination address is not allowed\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-create",
+      "index": 70,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "17",
+          "content-type": "application/json",
+          "upstash-cron": "0 0 1 1 *",
+          "upstash-method": "POST"
+        },
+        "method": "POST",
+        "path": "/v2/schedules/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"scheduleId\":\"<scd#1>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "47",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-list",
+      "index": 71,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/schedules"
+      },
+      "response": {
+        "body": "[{\"scheduleId\":\"<scd#1>\",\"destination\":\"http://sink.invalid/ok\",\"cron\":\"0 0 1 1 *\",\"createdAt\":<ts_ms>,\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"{\\\"schedule\\\":true}\",\"retries\":3,\"isPaused\":false,\"nextScheduleTime\":<ts_ms>,\"lastScheduleStates\":[]}]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "314",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-get",
+      "index": 72,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/schedules/<scd#1>"
+      },
+      "response": {
+        "body": "{\"scheduleId\":\"<scd#1>\",\"destination\":\"http://sink.invalid/ok\",\"cron\":\"0 0 1 1 *\",\"createdAt\":<ts_ms>,\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"{\\\"schedule\\\":true}\",\"retries\":3,\"isPaused\":false,\"nextScheduleTime\":<ts_ms>,\"lastScheduleStates\":[]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "312",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-pause",
+      "index": 73,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/schedules/<scd#1>/pause"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-get-paused",
+      "index": 74,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/schedules/<scd#1>"
+      },
+      "response": {
+        "body": "{\"scheduleId\":\"<scd#1>\",\"destination\":\"http://sink.invalid/ok\",\"cron\":\"0 0 1 1 *\",\"createdAt\":<ts_ms>,\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"{\\\"schedule\\\":true}\",\"retries\":3,\"isPaused\":true,\"nextScheduleTime\":<ts_ms>,\"lastScheduleStates\":[]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "311",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-resume",
+      "index": 75,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/schedules/<scd#1>/resume"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-delete",
+      "index": 76,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "DELETE",
+        "path": "/v2/schedules/<scd#1>"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-get-after-delete",
+      "index": 77,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/schedules/<scd#1>"
+      },
+      "response": {
+        "body": "{\"error\":\"schedule not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "30",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-missing-cron",
+      "index": 78,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/schedules/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"error\":\"missing Upstash-Cron header\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "39",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-invalid-cron",
+      "index": 79,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "upstash-cron": "not a cron"
+        },
+        "method": "POST",
+        "path": "/v2/schedules/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"error\":\"invalid cron expression \\\"not a cron\\\": expected 5 or 6 fields\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "74",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "schedules",
+      "id": "schedules-missing-destination",
+      "index": 80,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "upstash-cron": "0 0 1 1 *"
+        },
+        "method": "POST",
+        "path": "/v2/schedules/"
+      },
+      "response": {
+        "body": "404 Not Found",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "13",
+          "content-type": "text/plain; charset=utf-8",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-get",
+      "index": 81,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/flowControl/wire-fc-quiet"
+      },
+      "response": {
+        "body": "{\"flowControlKey\":\"wire-fc-quiet\",\"waitListSize\":0,\"parallelismMax\":2,\"parallelismCount\":0,\"rateMax\":10,\"rateCount\":0,\"ratePeriod\":1,\"ratePeriodStart\":<ts_s>,\"isPaused\":false,\"isPinnedParallelism\":false,\"isPinnedRate\":false,\"parallelism\":2,\"rate\":10,\"period\":1,\"paused\":false}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "280",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-pause",
+      "index": 82,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/flowControl/wire-fc-quiet/pause"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-get-paused",
+      "index": 83,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/flowControl/wire-fc-quiet"
+      },
+      "response": {
+        "body": "{\"flowControlKey\":\"wire-fc-quiet\",\"waitListSize\":0,\"parallelismMax\":2,\"parallelismCount\":0,\"rateMax\":10,\"rateCount\":0,\"ratePeriod\":1,\"ratePeriodStart\":<ts_s>,\"isPaused\":true,\"isPinnedParallelism\":false,\"isPinnedRate\":false,\"parallelism\":2,\"rate\":10,\"period\":1,\"paused\":true}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "278",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-resume",
+      "index": 84,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/flowControl/wire-fc-quiet/resume"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-pin",
+      "index": 85,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/flowControl/wire-fc-quiet/pin?parallelism=3&rate=7"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-get-pinned",
+      "index": 86,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/flowControl/wire-fc-quiet"
+      },
+      "response": {
+        "body": "{\"flowControlKey\":\"wire-fc-quiet\",\"waitListSize\":0,\"parallelismMax\":3,\"parallelismCount\":0,\"rateMax\":7,\"rateCount\":0,\"ratePeriod\":1,\"ratePeriodStart\":<ts_s>,\"isPaused\":false,\"isPinnedParallelism\":true,\"isPinnedRate\":true,\"parallelism\":3,\"rate\":7,\"period\":1,\"paused\":false}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "276",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-reset-rate",
+      "index": 87,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/flowControl/wire-fc-quiet/resetRate"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-unpin",
+      "index": 88,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/flowControl/wire-fc-quiet/unpin"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-get-unpinned",
+      "index": 89,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/flowControl/wire-fc-quiet"
+      },
+      "response": {
+        "body": "{\"flowControlKey\":\"wire-fc-quiet\",\"waitListSize\":0,\"parallelismMax\":3,\"parallelismCount\":0,\"rateMax\":7,\"rateCount\":0,\"ratePeriod\":1,\"ratePeriodStart\":<ts_s>,\"isPaused\":false,\"isPinnedParallelism\":false,\"isPinnedRate\":false,\"parallelism\":3,\"rate\":7,\"period\":1,\"paused\":false}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "278",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-global-parallelism",
+      "index": 90,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/globalParallelism"
+      },
+      "response": {
+        "body": "{\"parallelismMax\":1024,\"parallelismCount\":0}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "44",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-get-unknown",
+      "index": 91,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/flowControl/wire-fc-missing"
+      },
+      "response": {
+        "body": "{\"error\":\"flow control key not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "38",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "flowcontrol",
+      "id": "flowcontrol-pin-bad-period",
+      "index": 92,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "POST",
+        "path": "/v2/flowControl/wire-fc-quiet/pin?period=5x"
+      },
+      "response": {
+        "body": "{\"error\":\"invalid period: \\\"5x\\\"\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "34",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-wait",
+      "index": 93,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "128",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/wait/wire-event-1"
+      },
+      "response": {
+        "body": "{\"waiterId\":\"<wtr#1>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "41",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-waiters",
+      "index": 94,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/waiters/wire-event-1"
+      },
+      "response": {
+        "body": "[{\"waiterId\":\"<wtr#1>\",\"url\":\"http://sink.invalid/wf\",\"headers\":{},\"deadline\":<ts_s>,\"timeoutUrl\":\"http://sink.invalid/wf\"}]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "153",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-notify",
+      "index": 95,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "18",
+          "content-type": "text/plain"
+        },
+        "method": "POST",
+        "path": "/v2/notify/wire-event-1"
+      },
+      "response": {
+        "body": "[{\"waiter\":{\"url\":\"http://sink.invalid/wf\",\"headers\":{},\"deadline\":<ts_ms>},\"messageId\":\"<msg#19>\",\"workflowRunId\":null,\"workflowCreatedAt\":<ts_ms>}]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "186",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-notify-unknown-event",
+      "index": 96,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "9",
+          "content-type": "text/plain"
+        },
+        "method": "POST",
+        "path": "/v2/notify/wire-event-missing"
+      },
+      "response": {
+        "body": "[]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "2",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-run-seed",
+      "index": 97,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "15",
+          "content-type": "application/json",
+          "upstash-delay": "3600",
+          "upstash-workflow-runid": "wire-run-1"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/wf"
+      },
+      "response": {
+        "body": "{\"messageId\":\"<msg#20>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "46",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 201
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-run-get",
+      "index": 98,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/workflows/runs/wire-run-1"
+      },
+      "response": {
+        "body": "[{\"messageId\":\"<msg#20>\",\"body\":\"eyJzdGVwIjoiaW5pdCJ9\",\"callType\":\"step\"}]",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "96",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-logs-by-run",
+      "index": 99,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/workflows/logs?workflowRunId=wire-run-1"
+      },
+      "response": {
+        "body": "{\"cursor\":\"\",\"runs\":[{\"workflowRunId\":\"wire-run-1\",\"workflowUrl\":\"http://sink.invalid/wf\",\"workflowState\":\"RUN_STARTED\",\"workflowRunCreatedAt\":<ts_ms>,\"workflowRunCompletedAt\":0,\"steps\":[{\"messageId\":\"<msg#20>\",\"body\":\"eyJzdGVwIjoiaW5pdCJ9\",\"callType\":\"step\"}]}]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "294",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-logs-all",
+      "index": 100,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/workflows/logs"
+      },
+      "response": {
+        "body": "{\"cursor\":\"\",\"runs\":[{\"workflowRunId\":\"wire-run-1\",\"workflowUrl\":\"http://sink.invalid/wf\",\"workflowState\":\"RUN_STARTED\",\"workflowRunCreatedAt\":<ts_ms>,\"workflowRunCompletedAt\":0,\"steps\":[]}]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "200",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-run-cancel",
+      "index": 101,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "DELETE",
+        "path": "/v2/workflows/runs/wire-run-1"
+      },
+      "response": {
+        "body": "",
+        "headers": {
+          "connection": "keep-alive",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5",
+          "transfer-encoding": "chunked"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-run-get-after-cancel",
+      "index": 102,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/workflows/runs/wire-run-1"
+      },
+      "response": {
+        "body": "{\"error\":\"workflow run not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "34",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-run-get-unknown",
+      "index": 103,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/workflows/runs/wire-run-missing"
+      },
+      "response": {
+        "body": "{\"error\":\"workflow run not found\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "34",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-bulk-cancel-none",
+      "index": 104,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "39",
+          "content-type": "application/json"
+        },
+        "method": "DELETE",
+        "path": "/v2/workflows/runs"
+      },
+      "response": {
+        "body": "{\"cancelled\":0}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "15",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-wait-missing-url",
+      "index": 105,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "17",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/wait/wire-event-2"
+      },
+      "response": {
+        "body": "{\"error\":\"internal server error\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "33",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 500
+      }
+    },
+    {
+      "family": "workflow",
+      "id": "workflow-wait-invalid-json",
+      "index": 106,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "8",
+          "content-type": "application/json"
+        },
+        "method": "POST",
+        "path": "/v2/wait/wire-event-3"
+      },
+      "response": {
+        "body": "{\"error\":\"internal server error\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "33",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 500
+      }
+    },
+    {
+      "family": "logs",
+      "id": "logs-by-message-page-1",
+      "index": 107,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/logs?messageId=<msg#1>&count=1"
+      },
+      "response": {
+        "body": "{\"logs\":[{\"time\":<ts_ms>,\"messageId\":\"<msg#1>\",\"state\":\"DELIVERED\",\"url\":\"http://sink.invalid/ok\",\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"eyJoZWxsbyI6IndvcmxkIn0=\",\"responseStatus\":200,\"responseBody\":\"eyJvayI6dHJ1ZX0=\",\"responseHeader\":{\"date\":[\"<http_date>\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"maxRetries\":3,\"retried\":0,\"labels\":[]}],\"cursor\":\"<cursor#1>\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "583",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "logs",
+      "id": "logs-by-message-page-2",
+      "index": 108,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/logs?messageId=<msg#1>&count=1&cursor=<cursor#1>"
+      },
+      "response": {
+        "body": "{\"logs\":[{\"time\":<ts_ms>,\"messageId\":\"<msg#1>\",\"state\":\"ACTIVE\",\"url\":\"http://sink.invalid/ok\",\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"eyJoZWxsbyI6IndvcmxkIn0=\",\"maxRetries\":3,\"retried\":0,\"labels\":[]}]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "265",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "logs",
+      "id": "events-filter-delivered",
+      "index": 109,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/events?count=5&state=DELIVERED&messageId=<msg#1>"
+      },
+      "response": {
+        "body": "{\"events\":[{\"time\":<ts_ms>,\"messageId\":\"<msg#1>\",\"state\":\"DELIVERED\",\"url\":\"http://sink.invalid/ok\",\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"eyJoZWxsbyI6IndvcmxkIn0=\",\"responseStatus\":200,\"responseBody\":\"eyJvayI6dHJ1ZX0=\",\"responseHeader\":{\"date\":[\"<http_date>\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"maxRetries\":3,\"retried\":0,\"labels\":[]}]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "553",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "logs",
+      "id": "events-state-empty",
+      "index": 110,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/events?count=2&state=RETRY"
+      },
+      "response": {
+        "body": "{\"events\":[]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "13",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "logs",
+      "id": "events-empty-state",
+      "index": 111,
+      "path_kind": "ok",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/events?state=NO_SUCH_STATE"
+      },
+      "response": {
+        "body": "{\"events\":[]}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "13",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 200
+      }
+    },
+    {
+      "family": "logs",
+      "id": "logs-unauthorized",
+      "index": 112,
+      "path_kind": "error",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/v2/logs"
+      },
+      "response": {
+        "body": "{\"error\":\"missing authorization token\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "39",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 401
+      }
+    },
+    {
+      "family": "errors",
+      "id": "error-401-missing-token",
+      "index": 113,
+      "path_kind": "error",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/v2/messages/msg_01WIREGOLDENUNKNOWNAAAAAAA"
+      },
+      "response": {
+        "body": "{\"error\":\"missing authorization token\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "39",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 401
+      }
+    },
+    {
+      "family": "errors",
+      "id": "error-401-query-token-bad",
+      "index": 114,
+      "path_kind": "error",
+      "request": {
+        "headers": {},
+        "method": "GET",
+        "path": "/v2/keys?qstash_token=<redacted>"
+      },
+      "response": {
+        "body": "{\"error\":\"invalid authorization token\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "39",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 401
+      }
+    },
+    {
+      "family": "errors",
+      "id": "error-404-unknown-route",
+      "index": 115,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>"
+        },
+        "method": "GET",
+        "path": "/v2/no-such-route"
+      },
+      "response": {
+        "body": "404 Not Found",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "13",
+          "content-type": "text/plain; charset=utf-8",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 404
+      }
+    },
+    {
+      "family": "errors",
+      "id": "error-412-oversize-publish",
+      "index": 116,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "5000"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"error\":\"request body exceeds MAX_BODY_BYTES (4096 bytes)\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "60",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 412
+      }
+    },
+    {
+      "family": "errors",
+      "id": "error-400-invalid-method",
+      "index": 117,
+      "path_kind": "error",
+      "request": {
+        "headers": {
+          "authorization": "<bearer_token>",
+          "content-length": "10",
+          "upstash-method": "TRACE"
+        },
+        "method": "POST",
+        "path": "/v2/publish/http://sink.invalid/ok"
+      },
+      "response": {
+        "body": "{\"error\":\"invalid Upstash-Method: \\\"TRACE\\\"\"}",
+        "headers": {
+          "connection": "keep-alive",
+          "content-length": "45",
+          "content-type": "application/json",
+          "date": "<http_date>",
+          "keep-alive": "timeout=5"
+        },
+        "status": 400
+      }
+    }
+  ]
+}

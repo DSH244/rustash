@@ -1,0 +1,60 @@
+name: CI
+
+# Keep the Rust gates and container checks below aligned with the commands in CONTRIBUTING.md.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rust:
+    name: fmt + clippy + test + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # rust-toolchain.toml pins 1.98.1 and requests rustfmt + clippy, so CI compiles with
+      # the same compiler as a local `cargo` run. `rustup toolchain install` is explicit
+      # because relying on auto-install is deprecated.
+      - name: Install toolchain (from rust-toolchain.toml)
+        run: |
+          rustup toolchain install
+          rustup show active-toolchain
+          rustc --version && cargo --version && cargo fmt --version && cargo clippy --version
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: cargo fmt --all -- --check
+        run: cargo fmt --all -- --check
+
+      - name: cargo clippy --all-targets --locked -- -D warnings
+        run: cargo clippy --all-targets --locked -- -D warnings
+
+      - name: cargo test --locked
+        run: cargo test --locked
+
+      - name: cargo build --release --locked
+        run: cargo build --release --locked
+
+  docker:
+    name: docker build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: docker build -t rustash:verify .
+        run: docker build -t rustash:verify .
+
+      # A build that produces an image without both binaries is not a passing build.
+      - name: assert both binaries exist in the image
+        run: |
+          docker run --rm --entrypoint sh rustash:verify -c \
+            'command -v rustash && command -v rs-check && rs-check --help >/dev/null'

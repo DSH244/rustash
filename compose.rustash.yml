@@ -1,0 +1,30 @@
+# Rustash service definition for a single self-hosted LobeHub instance.
+#
+#   docker compose --env-file .env -f compose.rustash.yml up -d
+#
+# .env must define QSTASH_TOKEN, QSTASH_CURRENT_SIGNING_KEY and
+# QSTASH_NEXT_SIGNING_KEY. Do not commit that file.
+#
+# Host access is http://127.0.0.1:8081. If LobeHub also runs in a container,
+# put both services on one Docker network and use http://lobe-rustash:8080.
+services:
+  rustash:
+    image: hardyone/rustash:latest
+    container_name: lobe-rustash
+    restart: unless-stopped
+    environment:
+      PORT: "8080"
+      DATABASE_URL: sqlite:///data/rstash.sqlite3
+      QSTASH_TOKEN: ${QSTASH_TOKEN:?set QSTASH_TOKEN in .env}
+      QSTASH_CURRENT_SIGNING_KEY: ${QSTASH_CURRENT_SIGNING_KEY:?set QSTASH_CURRENT_SIGNING_KEY in .env}
+      QSTASH_NEXT_SIGNING_KEY: ${QSTASH_NEXT_SIGNING_KEY:?set QSTASH_NEXT_SIGNING_KEY in .env}
+      ALLOW_PRIVATE_DESTINATIONS: "true"
+    volumes:
+      # A named volume inherits /data ownership from the image (UID 10001), so a
+      # fresh `up -d` needs no host chown. Use a bind mount only when the host
+      # directory is writable by UID 10001 (add :z on SELinux hosts).
+      - state:/data
+    ports:
+      - "127.0.0.1:8081:8080"
+volumes:
+  state: {}

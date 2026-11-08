@@ -1,0 +1,2106 @@
+{
+  "mintedIds": [
+    "msg_01M6QQFC2MMZREEGEWSY17W7R9",
+    "msg_01M6QQFCW975A9CK05FK3MPB26",
+    "msg_01M6QQFCWBM2RJYN6HRP0NNCYA",
+    "msg_01M6QQFDP0NW7011Y5P5R0NRC5",
+    "msg_01M6QQFEFJXVSDQW03XXNNVA9D",
+    "msg_01M6QQFEFKKR4ZCCNAD1P1AY9G",
+    "msg_01M6QQFF948B3VCKBASQ57WTP6",
+    "msg_01M6QQFG2MXKG7NW4AMWS2Q5JW",
+    "msg_01M6QQFGW87KXAQNWTPCWQTMG8",
+    "msg_01M6QQFHNTGRQ2S66MQRHDT6RQ",
+    "msg_01M6QQFHNTZ59T8136ZB2RH4WT",
+    "msg_01M6QQFJFAS8K03KZH6GD7HJF1",
+    "msg_01M6QQFK92CD6XQQZY64BC1YN5",
+    "msg_01M6QQFK938B89V79RF677900F",
+    "dlq_01M6QQFK951FBE24AADRS2Y38X",
+    "msg_01M6QQFM2NDFTD8SA1AV3A3RCX",
+    "dlq_01M6QQFM2PRG93YVAZ7VNSQXA2",
+    "sig_26GYazMSzvRpdiDfY2NKnmq0k_RAFjuO",
+    "msg_01M6QQFMWEMJFY5ZVV6CXEB6WH",
+    "msg_01M6QQFPCCW8PMACF3BK9AAP75",
+    "msg_01M6QQFPCCJ6510BHR40PYB3NE",
+    "scd_01M6QQFQ61N20M6YZ9WDPVGFPJ",
+    "wtr_nXs2HPX8e36C_A78s6OzZA",
+    "msg_01M6QQFQ6C5S7TV9A5JFH86AKD",
+    "msg_01M6QQFQZX9YBGBARB6WZZ7DSN",
+    "MTc5Mzk0NTIxOTE1OToy",
+    "msg_01M6QQFK8WNEBCHDANQ4KR0R3E"
+  ],
+  "note": "un-normalized capture of the same run",
+  "steps": [
+    {
+      "id": "health-v2",
+      "index": 1,
+      "rawBody": "{\"status\":\"ok\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "15",
+        "date",
+        "Fri, 06 Nov 2026 06:06:59 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "health-readyz",
+      "index": 2,
+      "rawBody": "{\"status\":\"ok\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "15",
+        "date",
+        "Fri, 06 Nov 2026 06:06:59 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "health-v1-alias",
+      "index": 3,
+      "rawBody": "{\"status\":\"ok\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "15",
+        "date",
+        "Fri, 06 Nov 2026 06:06:59 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "health-unknown-subpath",
+      "index": 4,
+      "rawBody": "404 Not Found",
+      "rawHeaders": [
+        "content-type",
+        "text/plain; charset=utf-8",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "13",
+        "date",
+        "Fri, 06 Nov 2026 06:06:59 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "publish-url",
+      "index": 5,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFC2MMZREEGEWSY17W7R9\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:06:59 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-delay",
+      "index": 6,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFCW975A9CK05FK3MPB26\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:06:59 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-deduplication-id-first",
+      "index": 7,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFCWBM2RJYN6HRP0NNCYA\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:06:59 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-deduplication-id-repeat",
+      "index": 8,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFCWBM2RJYN6HRP0NNCYA\",\"deduplicated\":true}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "66",
+        "date",
+        "Fri, 06 Nov 2026 06:07:00 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-content-based-dedupe-first",
+      "index": 9,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFDP0NW7011Y5P5R0NRC5\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:00 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-content-based-dedupe-repeat",
+      "index": 10,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFDP0NW7011Y5P5R0NRC5\",\"deduplicated\":true}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "66",
+        "date",
+        "Fri, 06 Nov 2026 06:07:01 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-flow-control",
+      "index": 11,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFEFJXVSDQW03XXNNVA9D\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:01 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-forward-headers",
+      "index": 12,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFEFKKR4ZCCNAD1P1AY9G\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:01 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-header-forward",
+      "index": 13,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFF948B3VCKBASQ57WTP6\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:02 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-caller-ip",
+      "index": 14,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFG2MXKG7NW4AMWS2Q5JW\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:03 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "publish-missing-destination",
+      "index": 15,
+      "rawBody": "{\"error\":\"missing destination\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "31",
+        "date",
+        "Fri, 06 Nov 2026 06:07:04 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "publish-invalid-delay",
+      "index": 16,
+      "rawBody": "{\"error\":\"invalid Upstash-Delay: \\\"5x\\\"\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "41",
+        "date",
+        "Fri, 06 Nov 2026 06:07:04 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "publish-unknown-topic",
+      "index": 17,
+      "rawBody": "{\"error\":\"URL group \\\"wire-topic-missing\\\" not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "54",
+        "date",
+        "Fri, 06 Nov 2026 06:07:04 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "publish-blocked-destination",
+      "index": 18,
+      "rawBody": "{\"error\":\"destination address is not allowed\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:04 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "enqueue-ok",
+      "index": 19,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFGW87KXAQNWTPCWQTMG8\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:04 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "enqueue-missing-destination",
+      "index": 20,
+      "rawBody": "{\"error\":\"missing queue name or destination\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "45",
+        "date",
+        "Fri, 06 Nov 2026 06:07:04 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "enqueue-oversize-body",
+      "index": 21,
+      "rawBody": "{\"error\":\"request body exceeds MAX_BODY_BYTES (4096 bytes)\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "60",
+        "date",
+        "Fri, 06 Nov 2026 06:07:04 GMT"
+      ],
+      "status": 412
+    },
+    {
+      "id": "batch-two-items",
+      "index": 22,
+      "rawBody": "[{\"messageId\":\"msg_01M6QQFHNTGRQ2S66MQRHDT6RQ\"},{\"messageId\":\"msg_01M6QQFHNTZ59T8136ZB2RH4WT\"}]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "95",
+        "date",
+        "Fri, 06 Nov 2026 06:07:04 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "batchpublish-alias",
+      "index": 23,
+      "rawBody": "[{\"messageId\":\"msg_01M6QQFJFAS8K03KZH6GD7HJF1\"}]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "48",
+        "date",
+        "Fri, 06 Nov 2026 06:07:05 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "batch-item-failure",
+      "index": 24,
+      "rawBody": "{\"error\":\"URL group \\\"wire-topic-missing\\\" not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "54",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "batch-oversize-item",
+      "index": 25,
+      "rawBody": "{\"error\":\"body exceeds MAX_BODY_BYTES (4096 bytes)\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "52",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 412
+    },
+    {
+      "id": "batch-not-an-array",
+      "index": 26,
+      "rawBody": "{\"error\":\"batch body must be an array\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "39",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "batch-invalid-json",
+      "index": 27,
+      "rawBody": "{\"error\":\"internal server error\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "33",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 500
+    },
+    {
+      "id": "messages-get-delayed",
+      "index": 28,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFCW975A9CK05FK3MPB26\",\"url\":\"http://127.0.0.1:37137/ok\",\"method\":\"POST\",\"header\":{},\"body\":\"delay-body\",\"createdAt\":1793945219977,\"state\":\"CREATED\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "172",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "messages-delete-single",
+      "index": 29,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 202
+    },
+    {
+      "id": "messages-get-after-delete",
+      "index": 30,
+      "rawBody": "{\"error\":\"message not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "29",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "messages-delete-unknown",
+      "index": 31,
+      "rawBody": "{\"error\":\"message not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "29",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "messages-bulk-cancel-seed",
+      "index": 32,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFK92CD6XQQZY64BC1YN5\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "messages-bulk-cancel",
+      "index": 33,
+      "rawBody": "{\"cancelled\":2}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "15",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 202
+    },
+    {
+      "id": "dlq-seed-failure",
+      "index": 34,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFK938B89V79RF677900F\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:06 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "dlq-list",
+      "index": 35,
+      "rawBody": "{\"messages\":[{\"dlqId\":\"dlq_01M6QQFK951FBE24AADRS2Y38X\",\"messageId\":\"msg_01M6QQFK938B89V79RF677900F\",\"url\":\"http://127.0.0.1:37137/fail\",\"method\":\"POST\",\"header\":{},\"body\":\"dlq-body\",\"maxRetries\":0,\"createdAt\":1793945226531,\"state\":\"FAILED\",\"responseStatus\":500,\"responseBody\":\"{\\\"fail\\\":true}\",\"responseHeader\":{\"date\":[\"Fri, 06 Nov 2026 06:07:06 GMT\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"labels\":[]}]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "536",
+        "date",
+        "Fri, 06 Nov 2026 06:07:07 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "dlq-get",
+      "index": 36,
+      "rawBody": "{\"dlqId\":\"dlq_01M6QQFK951FBE24AADRS2Y38X\",\"messageId\":\"msg_01M6QQFK938B89V79RF677900F\",\"url\":\"http://127.0.0.1:37137/fail\",\"method\":\"POST\",\"header\":{},\"body\":\"dlq-body\",\"maxRetries\":0,\"createdAt\":1793945226531,\"state\":\"FAILED\",\"responseStatus\":500,\"responseBody\":\"{\\\"fail\\\":true}\",\"responseHeader\":{\"date\":[\"Fri, 06 Nov 2026 06:07:06 GMT\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"labels\":[]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "521",
+        "date",
+        "Fri, 06 Nov 2026 06:07:07 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "dlq-retry-single",
+      "index": 37,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFM2NDFTD8SA1AV3A3RCX\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:07 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "dlq-list-after-retry",
+      "index": 38,
+      "rawBody": "{\"messages\":[{\"dlqId\":\"dlq_01M6QQFM2PRG93YVAZ7VNSQXA2\",\"messageId\":\"msg_01M6QQFM2NDFTD8SA1AV3A3RCX\",\"url\":\"http://127.0.0.1:37137/fail\",\"method\":\"POST\",\"header\":{},\"body\":\"dlq-body\",\"maxRetries\":0,\"createdAt\":1793945227349,\"state\":\"FAILED\",\"responseStatus\":500,\"responseBody\":\"{\\\"fail\\\":true}\",\"responseHeader\":{\"date\":[\"Fri, 06 Nov 2026 06:07:07 GMT\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"labels\":[]}]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "536",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "dlq-bulk-delete",
+      "index": 39,
+      "rawBody": "{\"deleted\":1}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "13",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "dlq-list-empty",
+      "index": 40,
+      "rawBody": "{\"messages\":[]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "15",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "dlq-get-unknown",
+      "index": 41,
+      "rawBody": "{\"error\":\"DLQ message not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "33",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "dlq-retry-unknown",
+      "index": 42,
+      "rawBody": "{\"error\":\"DLQ message not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "33",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "keys-get",
+      "index": 43,
+      "rawBody": "{\"current\":\"wire-golden-current-key-0123456789\",\"next\":\"wire-golden-next-key-0123456789abc\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "92",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "keys-rotate",
+      "index": 44,
+      "rawBody": "{\"current\":\"wire-golden-next-key-0123456789abc\",\"next\":\"sig_26GYazMSzvRpdiDfY2NKnmq0k_RAFjuO\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "94",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "keys-get-after-rotate",
+      "index": 45,
+      "rawBody": "{\"current\":\"wire-golden-next-key-0123456789abc\",\"next\":\"sig_26GYazMSzvRpdiDfY2NKnmq0k_RAFjuO\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "94",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "keys-bad-token",
+      "index": 46,
+      "rawBody": "{\"error\":\"invalid authorization token\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "39",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 401
+    },
+    {
+      "id": "queues-create",
+      "index": 47,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "queues-list",
+      "index": 48,
+      "rawBody": "[{\"name\":\"wire-enq\",\"parallelism\":1,\"paused\":false,\"lag\":0,\"createdAt\":1793945224072,\"updatedAt\":1793945224072},{\"name\":\"wire-q\",\"parallelism\":2,\"paused\":false,\"lag\":0,\"createdAt\":1793945228171,\"updatedAt\":1793945228171}]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "221",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "queues-get",
+      "index": 49,
+      "rawBody": "{\"name\":\"wire-q\",\"parallelism\":2,\"paused\":false,\"lag\":0,\"createdAt\":1793945228171,\"updatedAt\":1793945228171}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "108",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "queues-pause",
+      "index": 50,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "queues-get-paused",
+      "index": 51,
+      "rawBody": "{\"name\":\"wire-q\",\"parallelism\":2,\"paused\":true,\"lag\":0,\"createdAt\":1793945228171,\"updatedAt\":1793945228173}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "107",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "queues-paused-publish",
+      "index": 52,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFMWEMJFY5ZVV6CXEB6WH\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "queues-get-lag",
+      "index": 53,
+      "rawBody": "{\"name\":\"wire-q\",\"parallelism\":2,\"paused\":true,\"lag\":1,\"createdAt\":1793945228171,\"updatedAt\":1793945228173}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "107",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "queues-resume",
+      "index": 54,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:08 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "queues-delete",
+      "index": 55,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:09 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "queues-get-after-delete",
+      "index": 56,
+      "rawBody": "{\"error\":\"queue not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "27",
+        "date",
+        "Fri, 06 Nov 2026 06:07:09 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "queues-pause-unknown",
+      "index": 57,
+      "rawBody": "{\"error\":\"queue not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "27",
+        "date",
+        "Fri, 06 Nov 2026 06:07:09 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "queues-invalid-parallelism",
+      "index": 58,
+      "rawBody": "{\"error\":\"parallelism must be >= 1\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "36",
+        "date",
+        "Fri, 06 Nov 2026 06:07:09 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "queues-invalid-name",
+      "index": 59,
+      "rawBody": "{\"error\":\"queue name may only contain letters, numbers, hyphens, underscores\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "78",
+        "date",
+        "Fri, 06 Nov 2026 06:07:09 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "topics-add-endpoints",
+      "index": 60,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:09 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "topics-list",
+      "index": 61,
+      "rawBody": "[{\"name\":\"wire-topic\",\"createdAt\":1793945229707,\"updatedAt\":1793945229707,\"endpoints\":[{\"name\":\"primary\",\"url\":\"http://127.0.0.1:37137/ok\"},{\"name\":\"secondary\",\"url\":\"http://127.0.0.1:37137/alt\"}]}]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "198",
+        "date",
+        "Fri, 06 Nov 2026 06:07:09 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "topics-get",
+      "index": 62,
+      "rawBody": "{\"name\":\"wire-topic\",\"createdAt\":1793945229707,\"updatedAt\":1793945229707,\"endpoints\":[{\"name\":\"primary\",\"url\":\"http://127.0.0.1:37137/ok\"},{\"name\":\"secondary\",\"url\":\"http://127.0.0.1:37137/alt\"}]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "196",
+        "date",
+        "Fri, 06 Nov 2026 06:07:09 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "topics-publish-fanout",
+      "index": 63,
+      "rawBody": "[{\"messageId\":\"msg_01M6QQFPCCW8PMACF3BK9AAP75\",\"url\":\"http://127.0.0.1:37137/ok\"},{\"messageId\":\"msg_01M6QQFPCCJ6510BHR40PYB3NE\",\"url\":\"http://127.0.0.1:37137/alt\"}]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "164",
+        "date",
+        "Fri, 06 Nov 2026 06:07:09 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "topics-remove-one-endpoint",
+      "index": 64,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "topics-get-after-remove",
+      "index": 65,
+      "rawBody": "{\"name\":\"wire-topic\",\"createdAt\":1793945229707,\"updatedAt\":1793945229707,\"endpoints\":[{\"name\":\"primary\",\"url\":\"http://127.0.0.1:37137/ok\"}]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "140",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "topics-delete",
+      "index": 66,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "topics-get-after-delete",
+      "index": 67,
+      "rawBody": "{\"error\":\"URL group not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "31",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "topics-empty-endpoints",
+      "index": 68,
+      "rawBody": "{\"error\":\"endpoints are required\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "34",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "topics-blocked-endpoint",
+      "index": 69,
+      "rawBody": "{\"error\":\"destination address is not allowed\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "schedules-create",
+      "index": 70,
+      "rawBody": "{\"scheduleId\":\"scd_01M6QQFQ61N20M6YZ9WDPVGFPJ\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "47",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "schedules-list",
+      "index": 71,
+      "rawBody": "[{\"scheduleId\":\"scd_01M6QQFQ61N20M6YZ9WDPVGFPJ\",\"destination\":\"http://127.0.0.1:37137/ok\",\"cron\":\"0 0 1 1 *\",\"createdAt\":1793945230529,\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"{\\\"schedule\\\":true}\",\"retries\":3,\"isPaused\":false,\"nextScheduleTime\":1798761600000,\"lastScheduleStates\":[]}]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "314",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "schedules-get",
+      "index": 72,
+      "rawBody": "{\"scheduleId\":\"scd_01M6QQFQ61N20M6YZ9WDPVGFPJ\",\"destination\":\"http://127.0.0.1:37137/ok\",\"cron\":\"0 0 1 1 *\",\"createdAt\":1793945230529,\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"{\\\"schedule\\\":true}\",\"retries\":3,\"isPaused\":false,\"nextScheduleTime\":1798761600000,\"lastScheduleStates\":[]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "312",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "schedules-pause",
+      "index": 73,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "schedules-get-paused",
+      "index": 74,
+      "rawBody": "{\"scheduleId\":\"scd_01M6QQFQ61N20M6YZ9WDPVGFPJ\",\"destination\":\"http://127.0.0.1:37137/ok\",\"cron\":\"0 0 1 1 *\",\"createdAt\":1793945230529,\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"{\\\"schedule\\\":true}\",\"retries\":3,\"isPaused\":true,\"nextScheduleTime\":1798761600000,\"lastScheduleStates\":[]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "311",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "schedules-resume",
+      "index": 75,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "schedules-delete",
+      "index": 76,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "schedules-get-after-delete",
+      "index": 77,
+      "rawBody": "{\"error\":\"schedule not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "30",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "schedules-missing-cron",
+      "index": 78,
+      "rawBody": "{\"error\":\"missing Upstash-Cron header\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "39",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "schedules-invalid-cron",
+      "index": 79,
+      "rawBody": "{\"error\":\"invalid cron expression \\\"not a cron\\\": expected 5 or 6 fields\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "74",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "schedules-missing-destination",
+      "index": 80,
+      "rawBody": "404 Not Found",
+      "rawHeaders": [
+        "content-type",
+        "text/plain; charset=utf-8",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "13",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "flowcontrol-get",
+      "index": 81,
+      "rawBody": "{\"flowControlKey\":\"wire-fc-quiet\",\"waitListSize\":0,\"parallelismMax\":2,\"parallelismCount\":0,\"rateMax\":10,\"rateCount\":0,\"ratePeriod\":1,\"ratePeriodStart\":1793945229,\"isPaused\":false,\"isPinnedParallelism\":false,\"isPinnedRate\":false,\"parallelism\":2,\"rate\":10,\"period\":1,\"paused\":false}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "280",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-pause",
+      "index": 82,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-get-paused",
+      "index": 83,
+      "rawBody": "{\"flowControlKey\":\"wire-fc-quiet\",\"waitListSize\":0,\"parallelismMax\":2,\"parallelismCount\":0,\"rateMax\":10,\"rateCount\":0,\"ratePeriod\":1,\"ratePeriodStart\":1793945229,\"isPaused\":true,\"isPinnedParallelism\":false,\"isPinnedRate\":false,\"parallelism\":2,\"rate\":10,\"period\":1,\"paused\":true}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "278",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-resume",
+      "index": 84,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-pin",
+      "index": 85,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-get-pinned",
+      "index": 86,
+      "rawBody": "{\"flowControlKey\":\"wire-fc-quiet\",\"waitListSize\":0,\"parallelismMax\":3,\"parallelismCount\":0,\"rateMax\":7,\"rateCount\":0,\"ratePeriod\":1,\"ratePeriodStart\":1793945230,\"isPaused\":false,\"isPinnedParallelism\":true,\"isPinnedRate\":true,\"parallelism\":3,\"rate\":7,\"period\":1,\"paused\":false}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "276",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-reset-rate",
+      "index": 87,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-unpin",
+      "index": 88,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-get-unpinned",
+      "index": 89,
+      "rawBody": "{\"flowControlKey\":\"wire-fc-quiet\",\"waitListSize\":0,\"parallelismMax\":3,\"parallelismCount\":0,\"rateMax\":7,\"rateCount\":0,\"ratePeriod\":1,\"ratePeriodStart\":1793945230,\"isPaused\":false,\"isPinnedParallelism\":false,\"isPinnedRate\":false,\"parallelism\":3,\"rate\":7,\"period\":1,\"paused\":false}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "278",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-global-parallelism",
+      "index": 90,
+      "rawBody": "{\"parallelismMax\":1024,\"parallelismCount\":0}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "44",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "flowcontrol-get-unknown",
+      "index": 91,
+      "rawBody": "{\"error\":\"flow control key not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "38",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "flowcontrol-pin-bad-period",
+      "index": 92,
+      "rawBody": "{\"error\":\"invalid period: \\\"5x\\\"\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "34",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 400
+    },
+    {
+      "id": "workflow-wait",
+      "index": 93,
+      "rawBody": "{\"waiterId\":\"wtr_nXs2HPX8e36C_A78s6OzZA\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "41",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "workflow-waiters",
+      "index": 94,
+      "rawBody": "[{\"waiterId\":\"wtr_nXs2HPX8e36C_A78s6OzZA\",\"url\":\"http://127.0.0.1:37137/wf\",\"headers\":{},\"deadline\":1793945290,\"timeoutUrl\":\"http://127.0.0.1:37137/wf\"}]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "153",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "workflow-notify",
+      "index": 95,
+      "rawBody": "[{\"waiter\":{\"url\":\"http://127.0.0.1:37137/wf\",\"headers\":{},\"deadline\":1793945290539},\"messageId\":\"msg_01M6QQFQ6C5S7TV9A5JFH86AKD\",\"workflowRunId\":null,\"workflowCreatedAt\":1793945230539}]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "186",
+        "date",
+        "Fri, 06 Nov 2026 06:07:10 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "workflow-notify-unknown-event",
+      "index": 96,
+      "rawBody": "[]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "2",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "workflow-run-seed",
+      "index": 97,
+      "rawBody": "{\"messageId\":\"msg_01M6QQFQZX9YBGBARB6WZZ7DSN\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "46",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 201
+    },
+    {
+      "id": "workflow-run-get",
+      "index": 98,
+      "rawBody": "[{\"messageId\":\"msg_01M6QQFQZX9YBGBARB6WZZ7DSN\",\"body\":\"eyJzdGVwIjoiaW5pdCJ9\",\"callType\":\"step\"}]",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "96",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "workflow-logs-by-run",
+      "index": 99,
+      "rawBody": "{\"cursor\":\"\",\"runs\":[{\"workflowRunId\":\"wire-run-1\",\"workflowUrl\":\"http://127.0.0.1:37137/wf\",\"workflowState\":\"RUN_STARTED\",\"workflowRunCreatedAt\":1793945231358,\"workflowRunCompletedAt\":0,\"steps\":[{\"messageId\":\"msg_01M6QQFQZX9YBGBARB6WZZ7DSN\",\"body\":\"eyJzdGVwIjoiaW5pdCJ9\",\"callType\":\"step\"}]}]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "294",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "workflow-logs-all",
+      "index": 100,
+      "rawBody": "{\"cursor\":\"\",\"runs\":[{\"workflowRunId\":\"wire-run-1\",\"workflowUrl\":\"http://127.0.0.1:37137/wf\",\"workflowState\":\"RUN_STARTED\",\"workflowRunCreatedAt\":1793945231358,\"workflowRunCompletedAt\":0,\"steps\":[]}]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "200",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "workflow-run-cancel",
+      "index": 101,
+      "rawBody": "",
+      "rawHeaders": [
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "transfer-encoding",
+        "chunked",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "workflow-run-get-after-cancel",
+      "index": 102,
+      "rawBody": "{\"error\":\"workflow run not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "34",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "workflow-run-get-unknown",
+      "index": 103,
+      "rawBody": "{\"error\":\"workflow run not found\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "34",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "workflow-bulk-cancel-none",
+      "index": 104,
+      "rawBody": "{\"cancelled\":0}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "15",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "workflow-wait-missing-url",
+      "index": 105,
+      "rawBody": "{\"error\":\"internal server error\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "33",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 500
+    },
+    {
+      "id": "workflow-wait-invalid-json",
+      "index": 106,
+      "rawBody": "{\"error\":\"internal server error\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "33",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 500
+    },
+    {
+      "id": "logs-by-message-page-1",
+      "index": 107,
+      "rawBody": "{\"logs\":[{\"time\":1793945219159,\"messageId\":\"msg_01M6QQFC2MMZREEGEWSY17W7R9\",\"state\":\"DELIVERED\",\"url\":\"http://127.0.0.1:37137/ok\",\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"eyJoZWxsbyI6IndvcmxkIn0=\",\"responseStatus\":200,\"responseBody\":\"eyJvayI6dHJ1ZX0=\",\"responseHeader\":{\"date\":[\"Fri, 06 Nov 2026 06:06:59 GMT\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"maxRetries\":3,\"retried\":0,\"labels\":[]}],\"cursor\":\"MTc5Mzk0NTIxOTE1OToy\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "583",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "logs-by-message-page-2",
+      "index": 108,
+      "rawBody": "{\"logs\":[{\"time\":1793945219156,\"messageId\":\"msg_01M6QQFC2MMZREEGEWSY17W7R9\",\"state\":\"ACTIVE\",\"url\":\"http://127.0.0.1:37137/ok\",\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"eyJoZWxsbyI6IndvcmxkIn0=\",\"maxRetries\":3,\"retried\":0,\"labels\":[]}]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "265",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "events-filter-delivered",
+      "index": 109,
+      "rawBody": "{\"events\":[{\"time\":1793945219159,\"messageId\":\"msg_01M6QQFC2MMZREEGEWSY17W7R9\",\"state\":\"DELIVERED\",\"url\":\"http://127.0.0.1:37137/ok\",\"method\":\"POST\",\"header\":{\"Content-Type\":[\"application/json\"]},\"body\":\"eyJoZWxsbyI6IndvcmxkIn0=\",\"responseStatus\":200,\"responseBody\":\"eyJvayI6dHJ1ZX0=\",\"responseHeader\":{\"date\":[\"Fri, 06 Nov 2026 06:06:59 GMT\"],\"connection\":[\"keep-alive\"],\"keep-alive\":[\"timeout=5\"],\"x-sink-mark\":[\"wire-golden\"],\"content-type\":[\"application/json; charset=utf-8\"],\"transfer-encoding\":[\"chunked\"]},\"maxRetries\":3,\"retried\":0,\"labels\":[]}]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "553",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "events-state-empty",
+      "index": 110,
+      "rawBody": "{\"events\":[]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "13",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "events-empty-state",
+      "index": 111,
+      "rawBody": "{\"events\":[]}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "13",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 200
+    },
+    {
+      "id": "logs-unauthorized",
+      "index": 112,
+      "rawBody": "{\"error\":\"missing authorization token\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "39",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 401
+    },
+    {
+      "id": "error-401-missing-token",
+      "index": 113,
+      "rawBody": "{\"error\":\"missing authorization token\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "39",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 401
+    },
+    {
+      "id": "error-401-query-token-bad",
+      "index": 114,
+      "rawBody": "{\"error\":\"invalid authorization token\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "39",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 401
+    },
+    {
+      "id": "error-404-unknown-route",
+      "index": 115,
+      "rawBody": "404 Not Found",
+      "rawHeaders": [
+        "content-type",
+        "text/plain; charset=utf-8",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "13",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 404
+    },
+    {
+      "id": "error-412-oversize-publish",
+      "index": 116,
+      "rawBody": "{\"error\":\"request body exceeds MAX_BODY_BYTES (4096 bytes)\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "60",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 412
+    },
+    {
+      "id": "error-400-invalid-method",
+      "index": 117,
+      "rawBody": "{\"error\":\"invalid Upstash-Method: \\\"TRACE\\\"\"}",
+      "rawHeaders": [
+        "content-type",
+        "application/json",
+        "connection",
+        "keep-alive",
+        "keep-alive",
+        "timeout=5",
+        "content-length",
+        "45",
+        "date",
+        "Fri, 06 Nov 2026 06:07:11 GMT"
+      ],
+      "status": 400
+    }
+  ]
+}

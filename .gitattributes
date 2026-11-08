@@ -1,0 +1,5 @@
+# Exclude test suites, fixtures and developer tooling from GitHub Linguist language statistics
+tools/** linguist-vendored
+tests/** linguist-vendored
+crates/rustash/tests/** linguist-vendored
+docs/** linguist-documentation

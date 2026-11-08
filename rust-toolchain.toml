@@ -1,0 +1,5 @@
+# CI reads this file, so a local run and a CI run compile the same compiler.
+[toolchain]
+channel = "1.98.1"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

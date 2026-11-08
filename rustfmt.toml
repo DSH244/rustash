@@ -1,0 +1,4 @@
+# Deliberately minimal: rustfmt's defaults are already the style this codebase is
+# formatted to. Any option added here changes every file at once, so add one only when
+# the default is genuinely wrong for this project.
+edition = "2021"
