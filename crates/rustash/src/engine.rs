@@ -127,8 +127,11 @@ impl Engine {
     async fn dispatch_loop(self: &Arc<Engine>) {
         let tick = std::time::Duration::from_millis(self.config.dispatch_tick_ms.max(1) as u64);
         // Heartbeat: when the loop goes silent for a whole idle interval, prove it is
-        // alive and show the outstanding work. Without this, an idle healthy queue and a
-        // wedged queue look identical in `docker logs`.
+        // alive and show the outstanding work. Only speak when there is something to
+        // say: all-zero counts stay at debug (an empty healthy queue is the normal
+        // case, not a reportable event), any backlog or in-flight work stays at info
+        // so `docker logs` surfaces exactly the moments worth looking at. Loop death
+        // itself is covered by the supervisor exit in main, not by this line.
         let idle_log_every = std::time::Duration::from_secs(60);
         let mut since_log = std::time::Instant::now();
         loop {
@@ -156,12 +159,16 @@ impl Engine {
                     )
                     .unwrap_or((0, 0, 0))
                 };
-                tracing::info!(
-                    due_now = counts.0,
-                    delayed = counts.1,
-                    leased = counts.2,
-                    "dispatch idle"
-                );
+                if counts == (0, 0, 0) {
+                    tracing::debug!("dispatch idle; queue empty");
+                } else {
+                    tracing::info!(
+                        due_now = counts.0,
+                        delayed = counts.1,
+                        leased = counts.2,
+                        "dispatch backlog"
+                    );
+                }
             }
             tokio::select! {
                 _ = tokio::time::sleep(tick) => {}
