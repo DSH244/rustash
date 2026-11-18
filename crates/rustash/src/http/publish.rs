@@ -16,7 +16,7 @@ use serde_json::Value;
 use crate::flow;
 use crate::headers::MessageSpec;
 use crate::model::publish_item_json;
-use crate::ssrf::{create_policy, validate_destination_url};
+use crate::ssrf::validate_destination_url;
 use crate::store::{create_message, dedupe_key_for, spec_to_row};
 use crate::tenant::Tenant;
 use crate::time::now_ms;
@@ -101,11 +101,10 @@ pub(super) async fn publish_to_destination(
             .collect()
     };
 
-    let policy = create_policy(
-        state.config.allow_private_destinations,
-        &state.config.destination_allow_cidrs,
-        &state.config.destination_block_cidrs,
-    );
+    // Single source of truth: the engine's startup-built policy, shared with delivery
+    // and the schedule fire path. Building a fresh one here would let the two paths
+    // drift apart on a config change.
+    let policy = state.engine.ssrf_policy();
 
     // Every publish carrying an fc spec refreshes its key config (pinned dimensions keep
     // the stored values; a changed rate restarts the bucket).
@@ -158,7 +157,7 @@ pub(super) async fn publish_to_destination(
     let mut results = Vec::new();
     for (url, topic_name, endpoint_name) in endpoints {
         // ingest SSRF structural check
-        validate_destination_url(&policy, &url)?;
+        validate_destination_url(policy, &url)?;
         let mut row = spec_to_row(&tenant.id, &url, body.clone(), spec, now_ms());
         row.topic_name = topic_name.clone();
         row.endpoint_name = endpoint_name.clone();

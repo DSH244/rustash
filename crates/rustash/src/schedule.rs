@@ -4,11 +4,12 @@
 use rusqlite::{params, Connection};
 use serde_json::{json, Map, Value};
 
-use crate::config::Config;
 use crate::cron::{compute_next_run_ms, ParsedCron};
 use crate::ids;
 use crate::model::{body_to_text, MessageRow};
-use crate::ssrf::{create_policy, validate_destination_url};
+#[cfg(test)]
+use crate::ssrf::create_policy;
+use crate::ssrf::validate_destination_url;
 use crate::store::insert_message;
 
 #[derive(Debug, Clone)]
@@ -223,7 +224,7 @@ fn schedule_message(row: &ScheduleRow, dest: &Destination, now: i64) -> MessageR
 pub fn scan_due_schedules(
     conn: &mut Connection,
     tenant_id: Option<&str>,
-    config: &Config,
+    policy: &crate::ssrf::SsrfPolicy,
     now: i64,
 ) -> rusqlite::Result<usize> {
     let due: Vec<ScheduleRow> = {
@@ -252,7 +253,7 @@ pub fn scan_due_schedules(
     };
     let mut fired = 0usize;
     for row in due {
-        if fire_schedule(conn, config, &row, now)? {
+        if fire_schedule(conn, policy, &row, now)? {
             fired += 1;
         }
     }
@@ -262,7 +263,7 @@ pub fn scan_due_schedules(
 /// Fire one due schedule row. Returns whether a message batch was created.
 fn fire_schedule(
     conn: &mut Connection,
-    config: &Config,
+    policy: &crate::ssrf::SsrfPolicy,
     row: &ScheduleRow,
     now: i64,
 ) -> rusqlite::Result<bool> {
@@ -284,14 +285,10 @@ fn fire_schedule(
     }
     let result: Result<Vec<String>, String> = (|| {
         let destinations = resolve_destinations(conn, tenant_id, &row.destination);
-        // All-or-nothing: validate every destination before creating any row.
-        let policy = create_policy(
-            config.allow_private_destinations,
-            &config.destination_allow_cidrs,
-            &config.destination_block_cidrs,
-        );
+        // All-or-nothing: validate every destination before creating any row. The policy
+        // comes from the engine (built once at startup), not a per-fire rebuild.
         for dest in &destinations {
-            validate_destination_url(&policy, &dest.url).map_err(|e| e.0)?;
+            validate_destination_url(policy, &dest.url).map_err(|e| e.0)?;
         }
         let mut ids = Vec::new();
         for dest in &destinations {
@@ -384,7 +381,8 @@ mod tests {
         let mut config = Config::for_test();
         config.allow_private_destinations = true;
         let now = 1_704_067_200_000i64;
-        let fired = scan_due_schedules(&mut conn, Some("t1"), &config, now).unwrap();
+        let fired =
+            scan_due_schedules(&mut conn, Some("t1"), &create_policy(true, "", ""), now).unwrap();
         assert_eq!(fired, 1);
         let msgs: i64 = conn
             .query_row(
@@ -396,7 +394,7 @@ mod tests {
         assert_eq!(msgs, 1);
         // Second scan at the same instant must not double-fire (CAS advanced the row).
         assert_eq!(
-            scan_due_schedules(&mut conn, Some("t1"), &config, now).unwrap(),
+            scan_due_schedules(&mut conn, Some("t1"), &create_policy(true, "", ""), now,).unwrap(),
             0
         );
         let next: i64 = conn
@@ -429,7 +427,13 @@ mod tests {
         .unwrap();
         let mut config = Config::for_test();
         config.allow_private_destinations = true;
-        scan_due_schedules(&mut conn, Some("t1"), &config, 1_704_067_200_000).unwrap();
+        scan_due_schedules(
+            &mut conn,
+            Some("t1"),
+            &create_policy(true, "", ""),
+            1_704_067_200_000,
+        )
+        .unwrap();
         let (topic, endpoint): (Option<String>, Option<String>) = conn
             .query_row(
                 "SELECT topic_name, endpoint_name FROM messages WHERE schedule_id='scd_1'",

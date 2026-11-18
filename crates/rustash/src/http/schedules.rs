@@ -10,7 +10,7 @@ use axum::Json;
 use serde_json::{json, Value};
 
 use crate::ids;
-use crate::ssrf::{create_policy, validate_destination_url};
+use crate::ssrf::validate_destination_url;
 use crate::tenant::Tenant;
 use crate::time::now_ms;
 
@@ -40,12 +40,8 @@ async fn create_schedule(
     let cron = crate::cron::parse_cron(&cron_raw)?;
     // A URL destination is SSRF-checked now; a URL-group name is resolved at fire time.
     if is_url(destination) {
-        let policy = create_policy(
-            state.config.allow_private_destinations,
-            &state.config.destination_allow_cidrs,
-            &state.config.destination_block_cidrs,
-        );
-        validate_destination_url(&policy, destination)?;
+        let policy = state.engine.ssrf_policy();
+        validate_destination_url(policy, destination)?;
     }
     check_payload_limit(body.len(), state.config.max_body_bytes)?;
     let body_opt = optional_body(body);

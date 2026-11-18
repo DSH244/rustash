@@ -1188,6 +1188,44 @@ async fn body_limit_412() {
     );
 }
 
+/// The router sets a physical body ceiling 1 MiB above the business limit. A body past
+/// it is rejected by axum with 413 before buffering — this is memory safety for
+/// chunked/unbounded requests, not a QStash contract (the docs cap the size, not the
+/// error shape). Just inside the ceiling, the business 412 still answers as documented.
+#[tokio::test]
+async fn body_past_physical_ceiling_is_rejected_413() {
+    let mut config = test_config();
+    config.max_body_bytes = 8;
+    let app = TestApp::start_with_config(config).await;
+    let sink = Sink::start().await;
+
+    // Just under the physical ceiling (8 + 1 MiB): the business 412 path.
+    let just_under = vec![b'x'; 1024 * 1024];
+    let r = app
+        .req(
+            reqwest::Method::POST,
+            &format!("/v2/publish/{}", sink.url("/x")),
+        )
+        .body(just_under)
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(r.status(), 412);
+
+    // Far past it: axum's hard 413 without ever buffering the whole body.
+    let way_over = vec![b'x'; 2 * 1024 * 1024];
+    let r = app
+        .req(
+            reqwest::Method::POST,
+            &format!("/v2/publish/{}", sink.url("/x")),
+        )
+        .body(way_over)
+        .send()
+        .await
+        .unwrap();
+    assert_eq!(r.status(), 413);
+}
+
 #[tokio::test]
 async fn ssrf_blocks_private_and_metadata_by_default() {
     let mut config = test_config();

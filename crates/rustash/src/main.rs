@@ -27,7 +27,31 @@ async fn main() {
     });
 
     let engine = Engine::new(db.clone(), config.clone());
-    engine.spawn();
+    // Watch the engine's background loops (dispatch / sweep / retention). If ANY of them
+    // ends — normally a panic such as mutex poisoning — the whole process exits nonzero
+    // instead of living on as an HTTP server that silently stops delivering. In-process
+    // restart cannot help here: a poisoned mutex panics every handler's lock().unwrap()
+    // too, so HTTP is dead as well. The supported recovery model is the one this binary
+    // already documents for SIGTERM: die, keep rows leased, let the next process reclaim
+    // them as expired leases (docker --restart / systemd does the pulling).
+    let loop_handles = engine.spawn();
+    tokio::spawn(async move {
+        // `std::process::exit` below ends the process on the first termination, so one
+        // join is enough; the loop shape was dropped for clippy::never_loop.
+        let h = loop_handles.into_iter().next();
+        if let Some(h) = h {
+            if h.await.is_err() {
+                tracing::error!(
+                    "engine background loop terminated; exiting for supervisor restart"
+                );
+            } else {
+                tracing::error!(
+                    "engine background loop exited unexpectedly; exiting for supervisor restart"
+                );
+            }
+            std::process::exit(1);
+        }
+    });
 
     let state = AppState { db, config, engine };
 

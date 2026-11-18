@@ -8,7 +8,7 @@ use axum::Json;
 use serde_json::{json, Map, Value};
 
 use crate::ids;
-use crate::ssrf::{create_policy, validate_destination_url};
+use crate::ssrf::validate_destination_url;
 use crate::time::now_ms;
 
 use super::auth::Authed;
@@ -131,11 +131,7 @@ pub(super) async fn add_endpoints(
         .endpoints
         .filter(|v| !v.is_empty())
         .ok_or_else(|| AppError::new(400, "endpoints are required"))?;
-    let policy = create_policy(
-        state.config.allow_private_destinations,
-        &state.config.destination_allow_cidrs,
-        &state.config.destination_block_cidrs,
-    );
+    let policy = state.engine.ssrf_policy();
     let mut parsed = Vec::new();
     for e in &endpoints {
         let url = e
@@ -143,7 +139,7 @@ pub(super) async fn add_endpoints(
             .and_then(|v| v.as_str())
             .unwrap_or("undefined")
             .to_string();
-        validate_destination_url(&policy, &url)?;
+        validate_destination_url(policy, &url)?;
         parsed.push((
             e.get("name").and_then(|v| v.as_str()).map(String::from),
             url,

@@ -66,12 +66,18 @@ pub struct Engine {
     /// How often an in-flight delivery pushes its own lease forward, or `None` when the
     /// lease already outlives every possible delivery. See `Config::resolve_lease_renewal`.
     pub lease_renew_ms: Option<i64>,
-    /// CIDR policy parsed once at startup, shared by every delivery and every redirect
-    /// hop (the old code rebuilt it on each attempt).
+    /// CIDR policy parsed once at startup, shared by every delivery, every redirect hop
+    /// and every publish-side destination check. The single source of truth: HTTP
+    /// handlers must take it from here (`ssrf_policy()`) instead of building their own,
+    /// so a config change can never apply to one path and not the other.
     ssrf_policy: SsrfPolicy,
 }
 
 impl Engine {
+    /// The process-wide destination policy. Read-only after startup.
+    pub fn ssrf_policy(&self) -> &SsrfPolicy {
+        &self.ssrf_policy
+    }
     pub fn new(db: Db, config: Arc<Config>) -> Arc<Engine> {
         let lease_renew_ms = config.resolve_lease_renewal().unwrap_or(None);
         let ssrf_policy = create_policy(
@@ -147,7 +153,8 @@ impl Engine {
     pub fn sweep_all(&self) {
         let now = now_ms();
         let mut conn = self.db.conn.lock().unwrap();
-        if let Err(e) = crate::schedule::scan_due_schedules(&mut conn, None, &self.config, now) {
+        if let Err(e) = crate::schedule::scan_due_schedules(&mut conn, None, &self.ssrf_policy, now)
+        {
             tracing::error!(error = %e, "schedule scan failed");
         }
         if let Err(e) = crate::workflow::scan_waiter_timeouts(
@@ -231,17 +238,33 @@ impl Engine {
                     None => None,
                 }
             };
+            // A claim failure must not fall through: `unwrap_or_default` used to return
+            // (vec![], None), whose `next = None` cleared the tenant's claim cursor and
+            // silently restarted any in-progress paused-prefix walk from the head. Break
+            // BEFORE the cursor block below so the walk state survives for the next tick.
             let (leased, next) = {
-                let mut conn = self.db.conn.lock().unwrap();
-                crate::lease::lease_batch(
-                    &mut conn,
-                    &tenant.id,
-                    got,
-                    self.config.lease_ms,
-                    self.config.tenant_parallelism_max,
-                    start.as_ref(),
-                )
-                .unwrap_or_default()
+                let claim = {
+                    let mut conn = self.db.conn.lock().unwrap();
+                    crate::lease::lease_batch(
+                        &mut conn,
+                        &tenant.id,
+                        got,
+                        self.config.lease_ms,
+                        self.config.tenant_parallelism_max,
+                        start.as_ref(),
+                    )
+                };
+                match claim {
+                    Ok(result) => result,
+                    Err(e) => {
+                        tracing::error!(
+                            tenant = %tenant.id,
+                            error = %e,
+                            "claim failed; queue stalled for this tenant until the error clears"
+                        );
+                        break;
+                    }
+                }
             };
             // `next` is only Some when the claim was cut short by MAX_CLAIM_SCAN, i.e. there
             // is more prefix to walk without having found live work yet.

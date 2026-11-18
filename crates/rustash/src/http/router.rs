@@ -169,8 +169,13 @@ pub fn build_router(state: AppState) -> Router {
     router
         .fallback(health::not_found)
         // MAX_BODY_BYTES (10 MiB by default) is enforced by `check_body_limit` with the
-        // exact QStash 412; axum's own 2 MiB `Bytes` default would answer 413 first.
-        .layer(DefaultBodyLimit::disable())
+        // exact QStash 412. A physical ceiling 1 MiB above the business limit restores
+        // memory safety for chunked bodies (the disable() below had buffered any size
+        // first). The 413 for bodies far past the limit is outside QStash's documented
+        // behavior; 412 semantics stay exact within the documented range.
+        .layer(DefaultBodyLimit::max(
+            state.config.max_body_bytes.saturating_add(1024 * 1024),
+        ))
         .layer(middleware::from_fn(stamp_node_framing))
         .with_state(state)
 }
