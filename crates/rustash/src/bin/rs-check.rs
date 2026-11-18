@@ -211,7 +211,12 @@ fn find_stuck(events: &[Value], now: i64) -> Vec<Value> {
             .copied();
         let Some(last) = last else { continue };
         let state = last.get("state").and_then(Value::as_str).unwrap_or("");
-        if !["ACTIVE", "RETRY", "ERROR", "FAILED"].contains(&state) {
+        // Only non-terminal states can be "stuck": a message whose last event is
+        // RETRY/ERROR/ACTIVE may be waiting on its next attempt, but FAILED (exhausted
+        // to the DLQ) and DELIVERED are finished — no further event will ever arrive,
+        // so they always satisfy the age check and would report forever. Counting them
+        // turned the stuck warning into an echo of the failure count.
+        if !["ACTIVE", "RETRY", "ERROR"].contains(&state) {
             continue;
         }
         let time = last.get("time").and_then(Value::as_i64).unwrap_or(now);
