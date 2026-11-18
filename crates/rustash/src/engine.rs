@@ -422,9 +422,11 @@ impl Engine {
                         ..Default::default()
                     },
                 );
-                // One line per delivery outcome is the queue's heartbeat: it lets docker
-                // logs answer "is it delivering, and how fast?" without touching SQLite.
-                tracing::info!(
+                // Per-delivery detail lives durably in message_events (rs-check reads
+                // it), so stdout gets only debug: it is a real-time copy of what the
+                // DB already keeps, and at info it was 99% of log volume with near-zero
+                // information gain. Turn on per-campaign with RUST_LOG=rustash::engine=debug.
+                tracing::debug!(
                     message_id = %row.id,
                     attempt = row.retried,
                     url = %row.url,
