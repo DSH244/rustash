@@ -194,6 +194,14 @@ pub(super) async fn publish_to_destination(
             );
         }
         drop(conn);
+        // Debug-level on purpose: publish can be high-volume and the HTTP response
+        // already carries the ids. Raise via RUST_LOG=rustash=http::publish=info if the
+        // accept path itself needs to be visible in logs.
+        if deduplicated {
+            tracing::debug!(message_id = %message_id, url = %url, "publish deduplicated");
+        } else {
+            tracing::debug!(message_id = %message_id, url = %url, "publish accepted");
+        }
         results.push(PublishResult {
             message_id,
             url: topic_name.as_ref().map(|_| url.clone()),

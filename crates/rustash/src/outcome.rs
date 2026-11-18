@@ -71,6 +71,8 @@ pub fn complete_delivery(
         Err(e) => {
             tracing::warn!(
                 message_id = %row.id,
+                attempt = row.retried,
+                url = %row.url,
                 error = %e,
                 "fenced delete failed after successful delivery"
             );
@@ -90,6 +92,7 @@ pub fn complete_delivery(
             if let Err(e) = insert_message(&tx, &cb) {
                 tracing::warn!(
                     message_id = %row.id,
+                    callback_url = %cb_url,
                     error = %e,
                     "success callback could not be persisted"
                 );

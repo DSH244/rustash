@@ -126,8 +126,43 @@ impl Engine {
 
     async fn dispatch_loop(self: &Arc<Engine>) {
         let tick = std::time::Duration::from_millis(self.config.dispatch_tick_ms.max(1) as u64);
+        // Heartbeat: when the loop goes silent for a whole idle interval, prove it is
+        // alive and show the outstanding work. Without this, an idle healthy queue and a
+        // wedged queue look identical in `docker logs`.
+        let idle_log_every = std::time::Duration::from_secs(60);
+        let mut since_log = std::time::Instant::now();
         loop {
-            self.drain_all().await;
+            let delivered_any = self.drain_all().await;
+            if delivered_any {
+                since_log = std::time::Instant::now();
+            } else if since_log.elapsed() >= idle_log_every {
+                since_log = std::time::Instant::now();
+                let counts = {
+                    let conn = self.db.conn.lock().unwrap();
+                    conn.query_row(
+                        "SELECT
+                             COALESCE(SUM(state='pending' AND not_before <= ?2), 0),
+                             COALESCE(SUM(state='pending' AND not_before >  ?2), 0),
+                             COALESCE(SUM(state='leased'), 0)
+                         FROM messages",
+                        rusqlite::params![now_ms()],
+                        |r| {
+                            Ok((
+                                r.get::<_, i64>(0)?,
+                                r.get::<_, i64>(1)?,
+                                r.get::<_, i64>(2)?,
+                            ))
+                        },
+                    )
+                    .unwrap_or((0, 0, 0))
+                };
+                tracing::info!(
+                    due_now = counts.0,
+                    delayed = counts.1,
+                    leased = counts.2,
+                    "dispatch idle"
+                );
+            }
             tokio::select! {
                 _ = tokio::time::sleep(tick) => {}
                 _ = self.wake.notified() => {}
@@ -141,7 +176,7 @@ impl Engine {
         loop {
             tokio::time::sleep(tick).await;
             self.sweep_all();
-            self.drain_all().await;
+            let _ = self.drain_all().await;
         }
     }
 
@@ -196,18 +231,21 @@ impl Engine {
         }
     }
 
-    pub async fn drain_all(self: &Arc<Engine>) {
+    pub async fn drain_all(self: &Arc<Engine>) -> bool {
         let _guard = self.drain_lock.lock().await;
         // Only tenants that actually have due work: an idle tenant used to cost a whole
         // claim transaction per drain (measured at 1001 tenants: p99 2.2 ms → 76.5 ms).
+        let mut leased_any = false;
         for tenant in load_with_due_work(&self.db, now_ms()) {
-            self.drain_tenant(&tenant).await;
+            leased_any = self.drain_tenant(&tenant).await || leased_any;
         }
+        leased_any
     }
 
     /// Drain ONE tenant's due messages: acquire slots BEFORE leasing, lease a batch,
     /// dispatch fire-and-forget, repeat while batches come back full.
-    async fn drain_tenant(self: &Arc<Engine>, tenant: &Tenant) {
+    async fn drain_tenant(self: &Arc<Engine>, tenant: &Tenant) -> bool {
+        let mut leased_any = false;
         let mut walk = 0usize;
         for _batch in 0..MAX_DRAIN_BATCHES {
             let want = self.config.dispatch_batch_limit;
@@ -296,6 +334,7 @@ impl Engine {
                 }
                 break;
             }
+            leased_any = leased_any || !leased.is_empty();
             for (row, permit) in leased.into_iter().zip(permits) {
                 let e = self.clone();
                 let t = tenant.clone();
@@ -310,6 +349,7 @@ impl Engine {
             }
             // fire-and-forget: do NOT await the batch; keep draining.
         }
+        leased_any
     }
 
     fn log_event(&self, row: &MessageRow, state: &str, extras: &EventExtras) {
@@ -341,7 +381,9 @@ impl Engine {
         }
         self.log_event(&row, "ACTIVE", &EventExtras::default());
 
+        let started = std::time::Instant::now();
         let response = self.deliver_with_lease(tenant, &row).await;
+        let duration_ms = started.elapsed().as_millis() as u64;
 
         // Cancellation raced the delivery: honor it regardless of the outcome, and stop
         // here even when the fenced delete lost (the old worker must not classify a
@@ -380,6 +422,16 @@ impl Engine {
                         ..Default::default()
                     },
                 );
+                // One line per delivery outcome is the queue's heartbeat: it lets docker
+                // logs answer "is it delivering, and how fast?" without touching SQLite.
+                tracing::info!(
+                    message_id = %row.id,
+                    attempt = row.retried,
+                    url = %row.url,
+                    status = resp.status.unwrap_or(0),
+                    duration_ms,
+                    "delivered"
+                );
             }
             Ok(resp) => {
                 let error = format!("endpoint returned {}", resp.status.unwrap_or(0));
@@ -394,14 +446,40 @@ impl Engine {
                 }
                 let delay_ms = retry_delay_from_response(resp.headers.as_ref(), now_ms())
                     .unwrap_or_else(|| retry_delay_ms_for(&row));
+                tracing::warn!(
+                    message_id = %row.id,
+                    attempt = row.retried,
+                    url = %row.url,
+                    status = resp.status.unwrap_or(0),
+                    duration_ms,
+                    retry_in_ms = delay_ms,
+                    "delivery failed; will retry"
+                );
                 self.retry(&row, &error, delay_ms, Some(&resp)).await;
             }
             Err(error) => {
                 if row.retried >= row.max_retries {
+                    tracing::warn!(
+                        message_id = %row.id,
+                        attempt = row.retried,
+                        url = %row.url,
+                        duration_ms,
+                        error = %error,
+                        "delivery error; retries exhausted"
+                    );
                     self.exhaust(&row, &error, &None).await;
                     return;
                 }
                 let delay_ms = retry_delay_ms_for(&row);
+                tracing::warn!(
+                    message_id = %row.id,
+                    attempt = row.retried,
+                    url = %row.url,
+                    duration_ms,
+                    retry_in_ms = delay_ms,
+                    error = %error,
+                    "delivery error; will retry"
+                );
                 self.retry(&row, &error, delay_ms, None).await;
             }
         }
@@ -450,6 +528,16 @@ impl Engine {
         let Some((dlq_id, _)) = moved else {
             return; // fence lost
         };
+        // Exhaustion means the message left the retry loop for the DLQ: an operator
+        // usually wants to know, so this is info, not debug.
+        tracing::info!(
+            message_id = %row.id,
+            attempt = row.retried,
+            url = %row.url,
+            dlq_id = %dlq_id,
+            error = %error,
+            "moved to DLQ"
+        );
         self.log_event(
             row,
             "FAILED",
