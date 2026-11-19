@@ -529,9 +529,11 @@ struct SeedSpec {
 ///   every boot, so both writers converge on one row and LobeHub always wins for the
 ///   schedules it declares. Seeding is only the safety net for the ones LobeHub does
 ///   not register.
-/// - Whole-config errors (`RUSTASH_SEED_SCHEDULES` not JSON, unknown preset name) fail
-///   startup: a misconfigured seed must not look like it took effect.
-/// - Per-entry errors (bad cron, SSRF-rejected destination) warn and skip that entry.
+/// - Whole-config errors (`RUSTASH_SEED_SCHEDULES` not JSON, unknown preset name, an
+///   entry missing a required field) fail startup: a misconfigured seed must not look
+///   like it took effect.
+/// - Value-level errors in a well-formed entry (bad cron, non-http destination,
+///   disallowed method) warn and skip that entry.
 ///
 /// Known drift: if LobeHub later drops a workflow that a preset entry still targets,
 /// a fresh database grows a schedule that delivers into a 404. That is visible in the
@@ -617,10 +619,8 @@ pub fn seed_schedules(conn: &Connection, config: &Config, tenant_id: &str) -> Re
 
     for spec in specs {
         // Per-entry validation: a bad entry skips itself instead of failing startup.
-        let result = validate_seed_spec(&spec).and_then(|()| {
-            insert_seed_spec(conn, tenant_id, &spec, config.default_max_retries)
-                .map_err(|e| e.to_string())
-        });
+        let result = validate_seed_spec(&spec)
+            .and_then(|()| insert_seed_spec(conn, tenant_id, &spec, config.default_max_retries));
         match result {
             Ok(inserted) if inserted => tracing::info!(
                 id = %spec.id,
@@ -663,32 +663,40 @@ fn insert_seed_spec(
     tenant_id: &str,
     spec: &SeedSpec,
     default_retries: i64,
-) -> rusqlite::Result<bool> {
-    let cron = crate::cron::parse_cron(&spec.cron).expect("validated in validate_seed_spec");
+) -> Result<bool, String> {
+    // Parse ONCE and store the PARSED parts, exactly like the API path
+    // (http/schedules.rs writes cron.expr + cron.tz separately). Storing the raw
+    // string instead would make `CRON_TZ=... 0 3 * * *` fire once correctly (next_run_at
+    // is computed from the parsed value here) and then stall forever: fire_schedule
+    // re-parses the STORED cron_expr, which rejects the raw prefix.
+    let cron = crate::cron::parse_cron(&spec.cron).map_err(|e| format!("bad cron: {e}"))?;
     let now = crate::time::now_ms();
     let next = crate::schedule::initial_next_run(&cron.expr, cron.tz.as_deref(), now)
-        .map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(std::io::Error::other(e))))?;
+        .map_err(|e| format!("bad next run: {e}"))?;
     let headers = spec.headers.clone().unwrap_or_else(|| "{}".into());
-    let n = conn.execute(
-        r#"INSERT INTO schedules
-             (id, tenant_id, destination, cron_expr, method, headers, body, retries,
-              labels, next_run_at, created_at, updated_at, is_paused)
-           VALUES (?1,?2,?3,?4,?5,?6,?7,?8,'[]',?9,?10,?10,?11)
-           ON CONFLICT(id) DO NOTHING"#,
-        rusqlite::params![
-            spec.id,
-            tenant_id,
-            spec.destination,
-            spec.cron,
-            spec.method,
-            headers,
-            spec.body,
-            default_retries,
-            next,
-            now,
-            spec.paused as i64,
-        ],
-    )?;
+    let n = conn
+        .execute(
+            r#"INSERT INTO schedules
+                 (id, tenant_id, destination, cron_expr, tz, method, headers, body, retries,
+                  labels, next_run_at, created_at, updated_at, is_paused)
+               VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,'[]',?10,?11,?11,?12)
+               ON CONFLICT(id) DO NOTHING"#,
+            rusqlite::params![
+                spec.id,
+                tenant_id,
+                spec.destination,
+                cron.expr,
+                cron.tz,
+                spec.method,
+                headers,
+                spec.body,
+                default_retries,
+                next,
+                now,
+                spec.paused as i64,
+            ],
+        )
+        .map_err(|e| e.to_string())?;
     Ok(n > 0)
 }
 
@@ -710,6 +718,33 @@ mod seed_tests {
         let inserted =
             insert_seed_spec(&db.conn.lock().unwrap(), &tenant, &spec, 3).expect("insert");
         assert!(inserted);
+    }
+
+    /// Regression for the High finding: a `CRON_TZ=` entry must store the PARSED cron
+    /// expression and its timezone in separate columns — the raw string in cron_expr
+    /// would make fire_schedule's re-parse fail after the first fire, stalling the
+    /// schedule forever with a misleading "seeded" info log.
+    #[test]
+    fn cron_tz_entry_stores_parsed_expr_and_tz() {
+        let json = r#"[{"id":"tz-job","cron":"CRON_TZ=Asia/Shanghai 0 3 * * *","destination":"http://app:3000/x"}]"#;
+        let config = config_with(None, None, Some(json));
+        let (db, _) = bootstrapped_db(&config);
+        let (expr, tz): (String, Option<String>) = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row(
+                "SELECT cron_expr, tz FROM schedules WHERE id='tz-job'",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .unwrap();
+        assert_eq!(expr, "0 3 * * *");
+        assert_eq!(tz.as_deref(), Some("Asia/Shanghai"));
+        // The stored parts must re-parse and advance, i.e. fire_schedule can progress.
+        let now = crate::time::now_ms();
+        let next = crate::schedule::initial_next_run(&expr, tz.as_deref(), now);
+        assert!(next.is_ok(), "stored cron must re-parse: {next:?}");
     }
 
     use super::*;
@@ -793,6 +828,49 @@ mod seed_tests {
             )
             .unwrap();
         assert_eq!(dest, "http://real-lobe:9999/api/workflows/task/watchdog");
+    }
+
+    /// End-to-end convergence: LobeHub's REAL upsert path (`ON CONFLICT DO UPDATE`,
+    /// exercised via a raw execute of the exact statement create_schedule runs) must
+    /// win over a seed row, and a later re-seed must NOT revert it.
+    #[test]
+    fn lobe_hub_upsert_wins_and_reseed_does_not_revert() {
+        let config = config_with(Some("lobehub-extras"), Some("http://lobe:3210"), None);
+        let (db, tenant) = bootstrapped_db(&config);
+        // 1. LobeHub upserts one of the preset ids through its own ON CONFLICT DO UPDATE.
+        db.conn
+            .lock()
+            .unwrap()
+            .execute(
+                r#"INSERT INTO schedules
+                     (id, tenant_id, destination, cron_expr, method, headers, body, retries,
+                      labels, next_run_at, created_at, updated_at, is_paused)
+                   VALUES ('lobe-task-watchdog',?1,'http://real-lobe:9999/api/workflows/task/watchdog',
+                           '15 * * * *','POST','{}',NULL,3,'[]',999999,111,111,0)
+                   ON CONFLICT(id) DO UPDATE SET
+                     destination=excluded.destination, cron_expr=excluded.cron_expr,
+                     method=excluded.method, headers=excluded.headers, body=excluded.body,
+                     retries=excluded.retries, next_run_at=excluded.next_run_at,
+                     updated_at=excluded.updated_at"#,
+                rusqlite::params![tenant],
+            )
+            .unwrap();
+        // 2. Rustash re-seeds (e.g. a reboot with seed env still set).
+        seed_schedules(&db.conn.lock().unwrap(), &config, &tenant).expect("re-seed");
+        // 3. LobeHub's values survive; the seed must not revert them.
+        let (dest, cron, next): (String, String, i64) = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row(
+                "SELECT destination, cron_expr, next_run_at FROM schedules WHERE id='lobe-task-watchdog'",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)),
+            )
+            .unwrap();
+        assert_eq!(dest, "http://real-lobe:9999/api/workflows/task/watchdog");
+        assert_eq!(cron, "15 * * * *");
+        assert_eq!(next, 999999, "upserted next_run_at must not be touched");
     }
 
     #[test]
