@@ -724,6 +724,78 @@ mod seed_tests {
     /// expression and its timezone in separate columns — the raw string in cron_expr
     /// would make fire_schedule's re-parse fail after the first fire, stalling the
     /// schedule forever with a misleading "seeded" info log.
+    /// Seed must write a REAL next_run_at: it is the field fire_schedule advances from.
+    /// 'a' is `0 3 * * *` (03:00 daily); the stored value must equal the next occurrence
+    /// computed by the same routine the API path uses, and must lie in the future.
+    #[test]
+    fn seeded_next_run_at_matches_the_api_path_computation() {
+        let json = r#"[{"id":"a","cron":"0 3 * * *","destination":"http://app:3000/x"}]"#;
+        let config = config_with(None, None, Some(json));
+        let (db, _) = bootstrapped_db(&config);
+        let (stored, created_at): (i64, i64) = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row(
+                "SELECT next_run_at, created_at FROM schedules WHERE id='a'",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .unwrap();
+        // The seed computes next from the row's created_at instant; recompute the same
+        // way and require exact agreement (not just "in the future").
+        let expected = crate::schedule::initial_next_run("0 3 * * *", None, created_at)
+            .expect("API-path computation must succeed");
+        assert_eq!(stored, expected);
+        assert!(stored > created_at, "next run must be after creation");
+    }
+
+    /// TZ-qualified crons compute the next occurrence in that timezone: 03:00 Shanghai
+    /// is a specific UTC instant, and the stored next_run_at must be exactly that.
+    #[test]
+    fn seeded_next_run_at_respects_cron_tz() {
+        let json = r#"[{"id":"tz","cron":"CRON_TZ=Asia/Shanghai 0 3 * * *","destination":"http://app:3000/x"}]"#;
+        let config = config_with(None, None, Some(json));
+        let (db, _) = bootstrapped_db(&config);
+        let (stored, created_at): (i64, i64) = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row(
+                "SELECT next_run_at, created_at FROM schedules WHERE id='tz'",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .unwrap();
+        let expected =
+            crate::schedule::initial_next_run("0 3 * * *", Some("Asia/Shanghai"), created_at)
+                .expect("tz-qualified computation must succeed");
+        assert_eq!(stored, expected);
+        // Sanity: it must differ from the naive (UTC) computation, proving the tz took
+        // effect rather than being dropped (Shanghai is UTC+8, so the instants differ).
+        let naive = crate::schedule::initial_next_run("0 3 * * *", None, created_at)
+            .expect("naive computation must succeed");
+        assert_ne!(stored, naive, "tz must shift the computed instant");
+    }
+
+    /// QSTASH_TOKEN unset + seed env configured: bootstrap must skip seeding entirely
+    /// (no tenant to own the rows) and still succeed — the process runs but /v2 is 401.
+    #[test]
+    fn seed_without_token_skips_and_leaves_no_schedules() {
+        let mut config = config_with(Some("lobehub-extras"), Some("http://lobe:3210"), None);
+        config.qstash_token = None;
+        let db = open_db(":memory:");
+        bootstrap(&db, &config).expect("bootstrap must not fail without a token");
+        assert_eq!(schedule_count(&db), 0);
+        let tenants: i64 = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row("SELECT COUNT(*) FROM tenants", [], |r| r.get(0))
+            .unwrap();
+        assert_eq!(tenants, 0);
+    }
+
     #[test]
     fn cron_tz_entry_stores_parsed_expr_and_tz() {
         let json = r#"[{"id":"tz-job","cron":"CRON_TZ=Asia/Shanghai 0 3 * * *","destination":"http://app:3000/x"}]"#;
@@ -830,9 +902,10 @@ mod seed_tests {
         assert_eq!(dest, "http://real-lobe:9999/api/workflows/task/watchdog");
     }
 
-    /// End-to-end convergence: LobeHub's REAL upsert path (`ON CONFLICT DO UPDATE`,
-    /// exercised via a raw execute of the exact statement create_schedule runs) must
-    /// win over a seed row, and a later re-seed must NOT revert it.
+    /// End-to-end convergence: LobeHub's upsert semantics (`ON CONFLICT DO UPDATE`
+    /// — the same conflict target and update set as create_schedule's statement,
+    /// executed here directly because create_schedule lives behind HTTP) must win
+    /// over a seed row, and a later re-seed must NOT revert it.
     #[test]
     fn lobe_hub_upsert_wins_and_reseed_does_not_revert() {
         let config = config_with(Some("lobehub-extras"), Some("http://lobe:3210"), None);
