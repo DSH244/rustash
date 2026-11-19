@@ -53,6 +53,11 @@ pub struct Config {
     pub run_migrations_on_start: bool,
     pub admin_token: Option<String>,
     pub log_level: String,
+    /// Schedule seeding (see `db::seed_schedules`): which preset to apply, the base URL
+    /// preset destinations are built from, and an optional free-form JSON list.
+    pub seed_preset: Option<String>,
+    pub seed_base_url: Option<String>,
+    pub seed_schedules_json: Option<String>,
 }
 
 impl Config {
@@ -168,6 +173,9 @@ pub fn load_from_env() -> Config {
         run_migrations_on_start: env_bool(&["RUN_MIGRATIONS_ON_START"], true),
         admin_token: env_opt_str(&["ADMIN_TOKEN"]),
         log_level: env_str(&["LOG_LEVEL"], "info"),
+        seed_preset: env_opt_str(&["RUSTASH_SEED_PRESET"]),
+        seed_base_url: env_opt_str(&["RUSTASH_SEED_BASE_URL"]),
+        seed_schedules_json: env_opt_str(&["RUSTASH_SEED_SCHEDULES"]),
     };
     cfg.validate();
     cfg
@@ -254,6 +262,9 @@ impl Config {
             qstash_next_signing_key: None,
             run_migrations_on_start: true,
             admin_token: None,
+            seed_preset: None,
+            seed_base_url: None,
+            seed_schedules_json: None,
             log_level: "info".into(),
         }
     }
@@ -366,6 +377,9 @@ mod tests {
             qstash_next_signing_key: None,
             run_migrations_on_start: true,
             admin_token: None,
+            seed_preset: None,
+            seed_base_url: None,
+            seed_schedules_json: None,
             log_level: "info".into(),
         }
     }

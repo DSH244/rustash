@@ -388,7 +388,7 @@ pub fn open_db(path: &str) -> Db {
 
 /// Boot the database per config: optional migrations + the single-tenant bootstrap
 /// (`ensureBootstrapTenant`): upsert the default tenant from QSTASH_TOKEN; signing keys
-/// come from env only on FIRST creation.
+/// come from env only on FIRST creation. Afterwards, apply schedule seeding if configured.
 pub fn bootstrap(db: &Db, config: &Config) -> Result<(), String> {
     {
         let mut conn = db.conn.lock().unwrap();
@@ -418,6 +418,9 @@ pub fn bootstrap(db: &Db, config: &Config) -> Result<(), String> {
     }
     let Some(token) = &config.qstash_token else {
         tracing::warn!("QSTASH_TOKEN unset: no bootstrap tenant (all /v2 calls will 401)");
+        if config.seed_preset.is_some() || config.seed_schedules_json.is_some() {
+            tracing::warn!("schedule seed skipped: no tenant (QSTASH_TOKEN unset)");
+        }
         return Ok(());
     };
     let token_hash = ids::hash_token(token);
@@ -429,24 +432,461 @@ pub fn bootstrap(db: &Db, config: &Config) -> Result<(), String> {
             |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?, r.get(3)?)),
         )
         .ok();
-    if let Some((id, name, _, _)) = existing {
-        tracing::info!(tenant = %id, name = %name, "bootstrap tenant exists (signing keys unchanged)");
+    let tenant_id = match existing {
+        Some((id, name, _, _)) => {
+            tracing::info!(tenant = %id, name = %name, "bootstrap tenant exists (signing keys unchanged)");
+            id
+        }
+        None => {
+            let current = config
+                .qstash_current_signing_key
+                .clone()
+                .unwrap_or_else(ids::new_signing_key);
+            let next = config
+                .qstash_next_signing_key
+                .clone()
+                .unwrap_or_else(ids::new_signing_key);
+            let now = crate::time::now_ms();
+            let id = ids::new_uuid();
+            conn.execute(
+                "INSERT INTO tenants (id, name, token_hash, external_id, signing_key_current, signing_key_next, created_at, updated_at) VALUES (?1,'default',?2,NULL,?3,?4,?5,?5)",
+                rusqlite::params![id, token_hash, current, next, now],
+            )
+            .map_err(|e| format!("bootstrap tenant insert failed: {}", e))?;
+            tracing::info!("bootstrap tenant created from QSTASH_TOKEN");
+            id
+        }
+    };
+    seed_schedules(&conn, config, &tenant_id)?;
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// Schedule seeding
+// ---------------------------------------------------------------------------
+
+/// The `lobehub-extras` preset: the workflow schedules LobeHub's own
+/// `startServer.js` deliberately does NOT register (upstash-quota reasons) but whose
+/// handler docs say they expect a QStash Schedule. The 3 schedules LobeHub registers
+/// itself on every boot (`lobe-inbound-webhook-sweep`, `lobe-task-schedule-dispatch`,
+/// `lobe-goal-sweep`) are intentionally absent — seeding them would only compete with
+/// LobeHub's own upsert. Cadences mirror hardy-one/lobehub HELLOSTASH_EXTRA_SCHEDULES:
+/// safety-net defaults, hourly granularity is enough for a personal instance.
+const LOBEHUB_EXTRAS_PRESET: &[(&str, &str, &str)] = &[
+    (
+        "lobe-task-scheduled-topic-dispatch",
+        "*/10 * * * *",
+        "/api/workflows/task/scheduled-topic-dispatch",
+    ),
+    (
+        "lobe-task-watchdog",
+        "15 * * * *",
+        "/api/workflows/task/watchdog",
+    ),
+    (
+        "lobe-verify-sweep",
+        "30 * * * *",
+        "/api/workflows/verify/sweep",
+    ),
+    (
+        "lobe-trash-purge",
+        "45 * * * *",
+        "/api/workflows/trash/purge",
+    ),
+    (
+        "lobe-agent-signal-nightly-self-review",
+        "0 * * * *",
+        "/api/workflows/agent-signal/cron-hourly-nightly-self-review",
+    ),
+    (
+        "lobe-memory-hourly-analysis",
+        "5 * * * *",
+        "/api/workflows/memory-user-memory/call-cron-hourly-analysis",
+    ),
+    (
+        "lobe-widget-tick",
+        "* * * * *",
+        "/api/workflows/widget/tick",
+    ),
+];
+
+/// One schedule to seed. JSON entries carry a full destination; preset entries get one
+/// built from `RUSTASH_SEED_BASE_URL`.
+struct SeedSpec {
+    id: String,
+    cron: String,
+    destination: String,
+    method: String,
+    headers: Option<String>,
+    body: Option<Vec<u8>>,
+    paused: bool,
+}
+
+/// Seed schedules at startup. Semantics, deliberately narrow:
+///
+/// - INSERT-only (`ON CONFLICT DO NOTHING`): a seed NEVER overwrites an existing
+///   schedule. LobeHub upserts its own schedules by the same `Upstash-Schedule-Id` on
+///   every boot, so both writers converge on one row and LobeHub always wins for the
+///   schedules it declares. Seeding is only the safety net for the ones LobeHub does
+///   not register.
+/// - Whole-config errors (`RUSTASH_SEED_SCHEDULES` not JSON, unknown preset name) fail
+///   startup: a misconfigured seed must not look like it took effect.
+/// - Per-entry errors (bad cron, SSRF-rejected destination) warn and skip that entry.
+///
+/// Known drift: if LobeHub later drops a workflow that a preset entry still targets,
+/// a fresh database grows a schedule that delivers into a 404. That is visible in the
+/// delivery log and DLQ, and removable via the schedules API; presets are updated with
+/// rustash releases.
+pub fn seed_schedules(conn: &Connection, config: &Config, tenant_id: &str) -> Result<(), String> {
+    let mut specs: Vec<SeedSpec> = Vec::new();
+
+    if let Some(preset) = &config.seed_preset {
+        match preset.as_str() {
+            "lobehub-extras" => {
+                let Some(base) = &config.seed_base_url else {
+                    tracing::warn!(
+                        "seed preset {preset} skipped: RUSTASH_SEED_BASE_URL not set (e.g. http://lobe:3210)"
+                    );
+                    return Ok(());
+                };
+                let base = base.trim_end_matches('/');
+                for (id, cron, path) in LOBEHUB_EXTRAS_PRESET {
+                    specs.push(SeedSpec {
+                        id: (*id).to_string(),
+                        cron: (*cron).to_string(),
+                        destination: format!("{base}{path}"),
+                        method: "POST".into(),
+                        headers: None,
+                        body: None,
+                        paused: false,
+                    });
+                }
+            }
+            other => return Err(format!("unknown RUSTASH_SEED_PRESET \"{other}\"")),
+        }
+    }
+
+    if let Some(json) = &config.seed_schedules_json {
+        let parsed: Vec<serde_json::Value> = serde_json::from_str(json)
+            .map_err(|e| format!("RUSTASH_SEED_SCHEDULES is not a JSON array: {e}"))?;
+        for (i, v) in parsed.iter().enumerate() {
+            let id = v
+                .get("id")
+                .and_then(|x| x.as_str())
+                .ok_or_else(|| format!("RUSTASH_SEED_SCHEDULES[{i}].id missing"))?
+                .to_string();
+            let cron = v
+                .get("cron")
+                .and_then(|x| x.as_str())
+                .ok_or_else(|| format!("RUSTASH_SEED_SCHEDULES[{i}].cron missing"))?
+                .to_string();
+            let destination = v
+                .get("destination")
+                .and_then(|x| x.as_str())
+                .ok_or_else(|| format!("RUSTASH_SEED_SCHEDULES[{i}].destination missing"))?
+                .to_string();
+            let method = v
+                .get("method")
+                .and_then(|x| x.as_str())
+                .unwrap_or("POST")
+                .to_ascii_uppercase();
+            let headers = v
+                .get("headers")
+                .and_then(|x| x.as_object())
+                .map(|m| serde_json::to_string(&m).expect("serialize a just-parsed Map"));
+            let body = v
+                .get("body")
+                .and_then(|x| x.as_str())
+                .map(|s| s.as_bytes().to_vec());
+            let paused = v.get("paused").and_then(|x| x.as_bool()).unwrap_or(false);
+            specs.push(SeedSpec {
+                id,
+                cron,
+                destination,
+                method,
+                headers,
+                body,
+                paused,
+            });
+        }
+    }
+
+    if specs.is_empty() {
         return Ok(());
     }
-    let current = config
-        .qstash_current_signing_key
-        .clone()
-        .unwrap_or_else(ids::new_signing_key);
-    let next = config
-        .qstash_next_signing_key
-        .clone()
-        .unwrap_or_else(ids::new_signing_key);
-    let now = crate::time::now_ms();
-    conn.execute(
-        "INSERT INTO tenants (id, name, token_hash, external_id, signing_key_current, signing_key_next, created_at, updated_at) VALUES (?1,'default',?2,NULL,?3,?4,?5,?5)",
-        rusqlite::params![ids::new_uuid(), token_hash, current, next, now],
-    )
-    .map_err(|e| format!("bootstrap tenant insert failed: {}", e))?;
-    tracing::info!("bootstrap tenant created from QSTASH_TOKEN");
+
+    for spec in specs {
+        // Per-entry validation: a bad entry skips itself instead of failing startup.
+        let result = validate_seed_spec(&spec).and_then(|()| {
+            insert_seed_spec(conn, tenant_id, &spec, config.default_max_retries)
+                .map_err(|e| e.to_string())
+        });
+        match result {
+            Ok(inserted) if inserted => tracing::info!(
+                id = %spec.id,
+                cron = %spec.cron,
+                dest = %spec.destination,
+                "seeded schedule"
+            ),
+            Ok(_) => {} // already exists; seed semantics are insert-only, stay silent
+            Err(e) => tracing::warn!(id = %spec.id, error = %e, "seed entry skipped"),
+        }
+    }
     Ok(())
+}
+
+fn validate_seed_spec(spec: &SeedSpec) -> Result<(), String> {
+    if spec.id.is_empty() {
+        return Err("id is empty".into());
+    }
+    crate::cron::parse_cron(&spec.cron)
+        .map_err(|e| format!("bad cron \"{}\": {}", spec.cron, e))?;
+    let lower = spec.destination.to_ascii_lowercase();
+    if !lower.starts_with("http://") && !lower.starts_with("https://") {
+        return Err(format!(
+            "destination must be an http(s) URL: {}",
+            spec.destination
+        ));
+    }
+    if !matches!(
+        spec.method.as_str(),
+        "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
+    ) {
+        return Err(format!("method {} not allowed", spec.method));
+    }
+    Ok(())
+}
+
+/// INSERT-only: `ON CONFLICT DO NOTHING`. Never UPDATEs, never deletes.
+fn insert_seed_spec(
+    conn: &Connection,
+    tenant_id: &str,
+    spec: &SeedSpec,
+    default_retries: i64,
+) -> rusqlite::Result<bool> {
+    let cron = crate::cron::parse_cron(&spec.cron).expect("validated in validate_seed_spec");
+    let now = crate::time::now_ms();
+    let next = crate::schedule::initial_next_run(&cron.expr, cron.tz.as_deref(), now)
+        .map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(std::io::Error::other(e))))?;
+    let headers = spec.headers.clone().unwrap_or_else(|| "{}".into());
+    let n = conn.execute(
+        r#"INSERT INTO schedules
+             (id, tenant_id, destination, cron_expr, method, headers, body, retries,
+              labels, next_run_at, created_at, updated_at, is_paused)
+           VALUES (?1,?2,?3,?4,?5,?6,?7,?8,'[]',?9,?10,?10,?11)
+           ON CONFLICT(id) DO NOTHING"#,
+        rusqlite::params![
+            spec.id,
+            tenant_id,
+            spec.destination,
+            spec.cron,
+            spec.method,
+            headers,
+            spec.body,
+            default_retries,
+            next,
+            now,
+            spec.paused as i64,
+        ],
+    )?;
+    Ok(n > 0)
+}
+
+#[cfg(test)]
+mod seed_tests {
+    #[test]
+    fn insert_into_fresh_row_returns_true() {
+        let config = config_with(None, None, None);
+        let (db, tenant) = bootstrapped_db(&config);
+        let spec = SeedSpec {
+            id: "probe".into(),
+            cron: "0 3 * * *".into(),
+            destination: "http://app:3000/x".into(),
+            method: "POST".into(),
+            headers: None,
+            body: None,
+            paused: false,
+        };
+        let inserted =
+            insert_seed_spec(&db.conn.lock().unwrap(), &tenant, &spec, 3).expect("insert");
+        assert!(inserted);
+    }
+
+    use super::*;
+
+    fn config_with(preset: Option<&str>, base: Option<&str>, json: Option<&str>) -> Config {
+        let mut c = Config::for_test();
+        c.qstash_token = Some("st_test".into());
+        c.seed_preset = preset.map(String::from);
+        c.seed_base_url = base.map(String::from);
+        c.seed_schedules_json = json.map(String::from);
+        c
+    }
+
+    fn bootstrapped_db(config: &Config) -> (Db, String) {
+        let db = open_db(":memory:");
+        bootstrap(&db, config).expect("bootstrap");
+        let tenant_id: String = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row("SELECT id FROM tenants LIMIT 1", [], |r| r.get(0))
+            .unwrap();
+        (db, tenant_id)
+    }
+
+    fn schedule_count(db: &Db) -> i64 {
+        db.conn
+            .lock()
+            .unwrap()
+            .query_row("SELECT COUNT(*) FROM schedules", [], |r| r.get(0))
+            .unwrap()
+    }
+
+    #[test]
+    fn preset_seeds_all_seven_entries() {
+        let config = config_with(Some("lobehub-extras"), Some("http://lobe:3210"), None);
+        let (db, _) = bootstrapped_db(&config);
+        assert_eq!(schedule_count(&db), 7);
+        let dest: String = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row(
+                "SELECT destination FROM schedules WHERE id='lobe-widget-tick'",
+                [],
+                |r| r.get(0),
+            )
+            .unwrap();
+        assert_eq!(dest, "http://lobe:3210/api/workflows/widget/tick");
+    }
+
+    #[test]
+    fn preset_is_idempotent_across_reboots() {
+        let config = config_with(Some("lobehub-extras"), Some("http://lobe:3210"), None);
+        let (db, tenant) = bootstrapped_db(&config);
+        assert_eq!(schedule_count(&db), 7);
+        // Second boot on the SAME database: insert-only semantics must be a no-op.
+        seed_schedules(&db.conn.lock().unwrap(), &config, &tenant).expect("re-seed");
+        assert_eq!(schedule_count(&db), 7);
+    }
+
+    #[test]
+    fn seed_never_overwrites_an_existing_schedule() {
+        let config = config_with(Some("lobehub-extras"), Some("http://lobe:3210"), None);
+        let (db, tenant) = bootstrapped_db(&config);
+        // Simulate LobeHub having registered a DIFFERENT destination under the same id.
+        db.conn.lock().unwrap().execute(
+            "UPDATE schedules SET destination='http://real-lobe:9999/api/workflows/task/watchdog' WHERE id='lobe-task-watchdog'",
+            [],
+        )
+        .unwrap();
+        seed_schedules(&db.conn.lock().unwrap(), &config, &tenant).expect("re-seed");
+        let dest: String = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row(
+                "SELECT destination FROM schedules WHERE id='lobe-task-watchdog'",
+                [],
+                |r| r.get(0),
+            )
+            .unwrap();
+        assert_eq!(dest, "http://real-lobe:9999/api/workflows/task/watchdog");
+    }
+
+    #[test]
+    fn json_entries_seed_with_defaults() {
+        let json = r#"[
+            {"id":"a","cron":"0 3 * * *","destination":"http://app:3000/x"},
+            {"id":"b","cron":"*/5 * * * *","destination":"http://app:3000/y","method":"PUT","paused":true},
+            {"id":"c","cron":"0 0 * * *","destination":"http://app:3000/z","headers":{"X-T":"1"},"body":"go"}
+        ]"#;
+        let config = config_with(None, None, Some(json));
+        let (db, _) = bootstrapped_db(&config);
+        assert_eq!(schedule_count(&db), 3);
+        // 'b' sets method/paused and takes the header default.
+        let (method, paused, headers): (String, i64, String) = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row(
+                "SELECT method, is_paused, headers FROM schedules WHERE id='b'",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)),
+            )
+            .unwrap();
+        assert_eq!(method, "PUT");
+        assert_eq!(paused, 1);
+        assert_eq!(headers, "{}");
+        // 'c' carries headers and body.
+        let (headers_c, body_c): (String, Option<Vec<u8>>) = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row(
+                "SELECT headers, body FROM schedules WHERE id='c'",
+                [],
+                |r| Ok((r.get(0)?, r.get(1)?)),
+            )
+            .unwrap();
+        assert!(
+            headers_c.contains("X-T"),
+            "headers should carry X-T: {headers_c}"
+        );
+        assert_eq!(body_c.as_deref(), Some(b"go".as_slice()));
+        // Seeded rows use the deployment's default retry budget.
+        let retries: i64 = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row("SELECT retries FROM schedules WHERE id='a'", [], |r| {
+                r.get(0)
+            })
+            .unwrap();
+        assert_eq!(retries, 3);
+    }
+
+    #[test]
+    fn bad_json_fails_startup_not_silently_ignored() {
+        let config = config_with(None, None, Some("[{bad"));
+        let db = open_db(":memory:");
+        assert!(bootstrap(&db, &config).is_err());
+    }
+
+    #[test]
+    fn unknown_preset_fails_startup() {
+        let config = config_with(Some("nope"), None, None);
+        let db = open_db(":memory:");
+        assert!(bootstrap(&db, &config).is_err());
+    }
+
+    #[test]
+    fn preset_without_base_url_skips_with_no_entries() {
+        let config = config_with(Some("lobehub-extras"), None, None);
+        let (db, _) = bootstrapped_db(&config);
+        assert_eq!(schedule_count(&db), 0);
+    }
+
+    #[test]
+    fn bad_entry_skips_but_good_ones_land() {
+        let json = r#"[
+            {"id":"good","cron":"0 3 * * *","destination":"http://app:3000/x"},
+            {"id":"bad-cron","cron":"25 hours","destination":"http://app:3000/y"},
+            {"id":"bad-url","cron":"0 4 * * *","destination":"ftp://app:3000/z"}
+        ]"#;
+        let config = config_with(None, None, Some(json));
+        let (db, _) = bootstrapped_db(&config);
+        let ids: i64 = db
+            .conn
+            .lock()
+            .unwrap()
+            .query_row(
+                "SELECT COUNT(*) FROM schedules WHERE id IN ('good','bad-cron','bad-url')",
+                [],
+                |r| r.get(0),
+            )
+            .unwrap();
+        assert_eq!(ids, 1);
+    }
 }

@@ -58,6 +58,9 @@ fn test_config() -> Config {
         run_migrations_on_start: true,
         admin_token: None,
         log_level: "off".into(),
+        seed_preset: None,
+        seed_base_url: None,
+        seed_schedules_json: None,
         workflow_run_stuck_hours: 24,
         workflow_run_retention_days: 7,
     }

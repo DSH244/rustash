@@ -44,6 +44,42 @@ The official LobeHub image uses `INTERNAL_APP_URL || APP_URL` when choosing the 
 
 **The one rule that matters:** the token and both signing keys are **the same values on both sides**. LobeHub signs nothing; it *verifies* what Rustash signs. If the two sides disagree, LobeHub rejects every delivery as an invalid signature.
 
+### Auto-seeded schedules (optional)
+
+LobeHub registers only 3 recurring schedules on startup (`lobe-inbound-webhook-sweep`, `lobe-task-schedule-dispatch`, `lobe-goal-sweep`). The other workflow endpoints (task watchdog, verify/trash sweeps, agent-signal review, memory hourly analysis, widget tick) expect a QStash Schedule too, but upstream leaves their registration to the deployment for Upstash-quota reasons — so on a fresh self-hosted stack those workflows silently never run.
+
+Rustash can seed them for you. Add to the Rustash service:
+
+```yaml
+environment:
+  RUSTASH_SEED_PRESET: lobehub-extras
+  RUSTASH_SEED_BASE_URL: http://lobe:3210   # the LobeHub address AS SEEN FROM Rustash
+```
+
+Semantics:
+
+- **Insert-only.** A seed never overwrites an existing schedule (`ON CONFLICT DO NOTHING`). LobeHub upserts its own 3 schedules on every boot by the same `Upstash-Schedule-Id`, so both writers converge on one row and LobeHub's values always win for anything it declares.
+- **Idempotent.** Restarts and fresh databases converge to the same set; re-seeding an existing database is a no-op.
+- **No deletes.** Schedules absent from the preset are never removed.
+- Base URL must be reachable from the Rustash container — inside a compose network that is the service name (`http://lobe:3210`), which is usually not LobeHub's public `APP_URL`. When unset, the preset is skipped with a warning.
+- The preset list tracks LobeHub's workflows per release. If LobeHub later drops one, the seeded schedule delivers into a 404 — visible in the delivery log and DLQ, removable via `DELETE /v2/schedules/:id`.
+
+For schedules beyond the preset (or for non-LobeHub use), declare them directly:
+
+```yaml
+environment:
+  RUSTASH_SEED_SCHEDULES: |
+    [
+      {"id": "my-nightly-cleanup", "cron": "0 3 * * *",
+       "destination": "http://app:3000/api/cron/cleanup",
+       "headers": {"X-Cron-Token": "secret"}, "body": "{\"mode\":\"full\"}"}
+    ]
+```
+
+Verify either way with `rs-check` (the `Schedules:` count) or `GET /v2/schedules`.
+
+---
+
 ### Why `ALLOW_PRIVATE_DESTINATIONS=true` is required
 
 Rustash refuses, by default, to deliver to loopback and private (RFC1918) addresses — an SSRF guard. In the Compose deployment, LobeHub workflow callbacks use `http://lobe:3210` on the private Docker network. With the default `false`, Rustash accepts the publish and then refuses to POST the delivery to LobeHub, so async steps and webhooks never run.
@@ -191,6 +227,9 @@ All Rustash settings are environment variables; the authoritative list and defau
 | `LOG_RETENTION_DAYS`, `DLQ_RETENTION_DAYS` | `14`, `7` | Retention for event rows and dead letters. |
 | `WORKFLOW_RUN_STUCK_HOURS`, `WORKFLOW_RUN_RETENTION_DAYS` | `24`, `7` | Workflow-run stuck detection / retention. |
 | `RUN_MIGRATIONS_ON_START` | `true` | Apply SQLite migrations at startup. |
+| `RUSTASH_SEED_PRESET` | unset | `lobehub-extras`: at startup, seed the 7 workflow schedules LobeHub does **not** register itself (task watchdog, verify/trash sweeps, agent-signal review, memory hourly analysis, widget tick). Insert-only: never overwrites schedules that already exist, so LobeHub's own registrations always win. |
+| `RUSTASH_SEED_BASE_URL` | unset | Base URL the preset destinations are built from, e.g. `http://lobe:3210` — must be reachable **from the Rustash container**, which is often not the same as LobeHub's public `APP_URL`. Preset is skipped with a warning when unset. |
+| `RUSTASH_SEED_SCHEDULES` | unset | JSON array of custom schedules to seed, same insert-only semantics. Entry fields: `id` (required, doubles as `Upstash-Schedule-Id`), `cron` (required), `destination` (required, http(s)), `method` (default `POST`), `headers` (object), `body` (string), `paused` (bool). Malformed JSON fails startup; a single invalid entry is warned and skipped. |
 | `ADMIN_TOKEN` | unset | When set, mounts `/admin/tenants`. Leave unset otherwise. |
 | `REGION` | `us-east-1` | Default region stored on newly created tenant records. |
 | `LOG_LEVEL` | `info` | Tracing filter. |
