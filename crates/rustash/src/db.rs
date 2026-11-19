@@ -903,9 +903,10 @@ mod seed_tests {
     }
 
     /// End-to-end convergence: LobeHub's upsert semantics (`ON CONFLICT DO UPDATE`
-    /// — the same conflict target and update set as create_schedule's statement,
-    /// executed here directly because create_schedule lives behind HTTP) must win
-    /// over a seed row, and a later re-seed must NOT revert it.
+    /// — the same conflict target as create_schedule's statement, with an update set
+    /// covering the asserted columns; executed here directly because create_schedule
+    /// lives behind HTTP) must win over a seed row, and a later re-seed must NOT
+    /// revert it.
     #[test]
     fn lobe_hub_upsert_wins_and_reseed_does_not_revert() {
         let config = config_with(Some("lobehub-extras"), Some("http://lobe:3210"), None);
