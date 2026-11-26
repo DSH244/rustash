@@ -45,7 +45,8 @@ pub async fn attempt(
         Url::parse(&row.url).map_err(|_| format!("invalid destination URL \"{}\"", row.url))?;
     check_resolved_allowed(policy, &parsed)?;
 
-    // QStash LazyFetch: workflow invocations always deliver an EMPTY body.
+    // QStash LazyFetch: workflow step messages deliver an EMPTY body. Failure callbacks
+    // are workflow messages too, but their failure payload is part of the delivery.
     let deliver_body: Option<Vec<u8>> = if is_workflow_message(&row.headers) {
         None
     } else {

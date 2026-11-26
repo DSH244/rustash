@@ -1710,6 +1710,71 @@ async fn workflow_wait_notify_wakes_with_resolution() {
 }
 
 #[tokio::test]
+async fn workflow_failure_callback_preserves_body_and_signature() {
+    let app = TestApp::start().await;
+    let sink = Sink::start().await;
+    let dest = sink.url("/workflow-failure");
+    let failure_body = json!({
+        "status": 500,
+        "body": "aW50ZXJuYWwgZXJyb3I=",
+        "workflowRunId": "run_failure",
+    })
+    .to_string();
+
+    let res = app
+        .publish(
+            &dest,
+            &failure_body,
+            &[
+                ("Upstash-Workflow-RunId", "run_failure"),
+                ("Upstash-Workflow-Failure-Callback", "true"),
+                ("Upstash-Workflow-Is-Failure", "true"),
+            ],
+        )
+        .await;
+    let message_id = TestApp::message_id(&res);
+
+    wait_until("failure callback delivered", 5_000, || {
+        !sink.seen().is_empty()
+    })
+    .await;
+    let seen = sink.seen()[0].clone();
+    assert_eq!(seen.body, failure_body.as_bytes());
+    let h = |name: &str| {
+        seen.headers
+            .iter()
+            .find(|(k, _)| k == name)
+            .map(|(_, v)| v.clone())
+    };
+    assert_eq!(
+        h("content-length").as_deref(),
+        Some(failure_body.len().to_string().as_str())
+    );
+    assert_eq!(
+        h("upstash-workflow-failure-callback").as_deref(),
+        Some("true")
+    );
+    assert_eq!(
+        h("upstash-message-id").as_deref(),
+        Some(message_id.as_str())
+    );
+
+    use base64::Engine;
+    let signature = h("upstash-signature").expect("signature");
+    let parts: Vec<&str> = signature.split('.').collect();
+    let payload: Value = serde_json::from_slice(
+        &base64::engine::general_purpose::URL_SAFE_NO_PAD
+            .decode(parts[1])
+            .unwrap(),
+    )
+    .unwrap();
+    use sha2::Digest;
+    let expected_claim = base64::engine::general_purpose::URL_SAFE_NO_PAD
+        .encode(sha2::Sha256::digest(failure_body.as_bytes()));
+    assert_eq!(payload["body"], json!(expected_claim));
+}
+
+#[tokio::test]
 async fn workflow_waiter_timeout_fires() {
     let mut config = test_config();
     config.scheduler_tick_ms = 50;

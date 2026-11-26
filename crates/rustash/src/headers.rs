@@ -514,10 +514,13 @@ pub fn spec_not_before(spec: &MessageSpec, now_ms: i64) -> Option<i64> {
     None
 }
 
-/// Workflow LazyFetch detection: a forwarded `Upstash-Workflow-RunId` marks a workflow
-/// message, delivered with an EMPTY body (signer signs over the empty body).
+/// Workflow LazyFetch detection: workflow step messages carry their result in
+/// `Upstash-Workflow-RunId`, so the destination fetches it from the workflow run.
+/// Failure callbacks already carry the failure details in their request body.
 pub fn is_workflow_message(headers: &Value) -> bool {
     first_header(headers, "upstash-workflow-runid").is_some()
+        && !first_header(headers, "upstash-workflow-failure-callback")
+            .is_some_and(|value| value.eq_ignore_ascii_case("true"))
 }
 
 #[cfg(test)]
@@ -584,6 +587,24 @@ mod tests {
             spec.forward_headers["upstash-workflow-sdk-version"],
             json!(["1.0"])
         );
+    }
+
+    #[test]
+    fn workflow_failure_callbacks_keep_their_body() {
+        let run_id = json!({"upstash-workflow-runid": ["run_1"]});
+        assert!(is_workflow_message(&run_id));
+
+        let failure = json!({
+            "upstash-workflow-runid": ["run_1"],
+            "upstash-workflow-failure-callback": ["true"],
+        });
+        assert!(!is_workflow_message(&failure));
+
+        let failure_upper = json!({
+            "upstash-workflow-runid": ["run_1"],
+            "upstash-workflow-failure-callback": ["TRUE"],
+        });
+        assert!(!is_workflow_message(&failure_upper));
     }
 
     #[test]
